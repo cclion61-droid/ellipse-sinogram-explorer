@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="互動式橢圓 Radon transform 與 sinogram 視覺化工具">
+  <meta name="theme-color" content="#08131f">
+  <title>Ellipse Radon Lab</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2308131f'/%3E%3Cellipse cx='29' cy='32' rx='20' ry='11' transform='rotate(-24 29 32)' fill='none' stroke='%234bd8c5' stroke-width='5'/%3E%3Cpath d='M49 12v40' stroke='%23ffca76' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">INTERACTIVE RADON GEOMETRY</p>
+      <h1>Ellipse Radon Lab</h1>
+    </div>
+    <div class="top-actions">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="computeStatus">準備完成</span>
+      <button id="resetButton" class="button button-quiet" type="button">重設範例</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="panel controls-panel" aria-label="橢圓控制區">
+      <section class="section-block intro-block">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">DATA MODEL</p>
+            <h2>資料模型</h2>
+          </div>
+        </div>
+        <div class="segmented" role="radiogroup" aria-label="資料模型">
+          <button class="segment is-active" type="button" data-mode="binary" role="radio" aria-checked="true">二值聯集</button>
+          <button class="segment" type="button" data-mode="additive" role="radio" aria-checked="false">密度加法</button>
+        </div>
+        <p id="modeNote" class="supporting-text">重疊區仍為 1；每條射線只計算聯集內的總長度。</p>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">OBJECTS</p>
+            <h2>橢圓</h2>
+          </div>
+          <button id="addEllipseButton" class="button button-primary" type="button">＋ 新增</button>
+        </div>
+        <div id="ellipseList" class="ellipse-list" aria-live="polite"></div>
+      </section>
+
+      <section id="parameterSection" class="section-block parameter-section">
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="section-kicker">SELECTED ELLIPSE</p>
+            <h2 id="selectedTitle">橢圓 1</h2>
+          </div>
+          <button id="deleteEllipseButton" class="icon-button danger" type="button" aria-label="刪除目前橢圓" title="刪除目前橢圓">×</button>
+        </div>
+        <div id="parameterControls" class="parameter-controls"></div>
+        <div class="equation-card">
+          <p class="equation-label">邊界參數式，0 ≤ t &lt; 2π</p>
+          <div id="parametricEquation" class="equation"></div>
+          <p class="equation-label equation-label-secondary">集合定義</p>
+          <div id="implicitEquation" class="equation equation-small"></div>
+        </div>
+      </section>
+    </aside>
+
+    <section class="visual-column">
+      <article class="panel canvas-card object-card">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">OBJECT SPACE</p>
+            <h2>物體平面</h2>
+          </div>
+          <div class="legend-inline">
+            <span><i class="legend-mark center-mark"></i>移動</span>
+            <span><i class="legend-mark handle-mark"></i>長軸／短軸</span>
+          </div>
+        </div>
+        <div class="canvas-wrap object-wrap">
+          <canvas id="objectCanvas" tabindex="0" aria-label="可拖曳的橢圓物體平面；拖曳中心可移動，拖曳控制點可改變軸長與旋轉角度"></canvas>
+          <div class="canvas-hint">拖曳中心移動；拖曳兩個控制點改變方向與大小</div>
+        </div>
+      </article>
+
+      <article class="panel canvas-card sinogram-card">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">RADON DATA</p>
+            <h2>Sinogram</h2>
+          </div>
+          <label class="select-label" for="resolutionSelect">
+            解析度
+            <select id="resolutionSelect">
+              <option value="fast">快速</option>
+              <option value="standard" selected>標準</option>
+              <option value="fine">精細</option>
+            </select>
+          </label>
+        </div>
+        <div class="canvas-wrap sinogram-wrap">
+          <canvas id="sinogramCanvas" aria-label="由目前橢圓配置計算出的 sinogram 熱度圖"></canvas>
+        </div>
+        <div class="sinogram-footer">
+          <div class="color-scale" aria-hidden="true"></div>
+          <div class="scale-labels"><span>0</span><span id="maxValueLabel">max = 0</span></div>
+          <div id="dataSummary" class="data-summary">0 個可見橢圓</div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>每一個像素都由直線與橢圓的解析交點計算，不使用 FBP。</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
