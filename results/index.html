@@ -30,7 +30,7 @@
       <div class="hero-copy">
       <p class="eyebrow">RECONSTRUCTION COMPARISON · 2026-09-30</p>
         <h1>同一份投影資料，<br>把每種方法放在同一列看。</h1>
-        <p class="lede">單凸體作基準，重點看雙凸體比較與初始化失敗。紅線只供評估，不是重建輸入。</p>
+        <p class="lede">單凸體與雙凸體都比較真值、FBP、SIRT、TV 與幾何包絡法。紅線只供評估。</p>
       </div>
       <aside class="hero-card" aria-label="評估摘要">
         <p>主要指標</p>
@@ -48,9 +48,9 @@
       <div class="section-head">
         <div>
           <p class="eyebrow">01 · SINGLE CONVEX BODY</p>
-          <h2>單凸體：幾何包絡法的直接版本</h2>
+          <h2>單凸體：同一份 sinogram 的五欄比較</h2>
         </div>
-        <p>單凸體不需要分離視角。全部量到的弦長都屬於同一個物體，可直接建立內、外包絡。</p>
+        <p>每一列使用同一份無雜訊投影資料。像素法固定使用 0.5 門檻與凸化後處理。</p>
       </div>
 
       <div class="single-model">
@@ -59,47 +59,55 @@
         <p><strong>保證</strong>　若 <em>Q</em> 非空，則 <em>Q</em>⊆<em>D</em>⊆<em>P</em>，且 <em>d</em><sub>H</sub>(<em>D</em>,<em>R</em>)≤½<em>d</em><sub>H</sub>(<em>P</em>,<em>Q</em>)。這裡展示一輪包絡；雙凸體另有交替細化。</p>
       </div>
 
-      <div class="matrix-scroll" role="region" aria-label="單凸體包絡法與 FBP 比較" tabindex="0">
+      <div class="matrix-scroll" role="region" aria-label="單凸體五種方法比較" tabindex="0">
         <div class="comparison-grid single-grid">
           <div class="corner-label">量測條件</div>
           <div class="column-label"><strong>真值</strong><span>Truth</span></div>
           <div class="column-label"><strong>FBP 0.5</strong><span class="truth-key">灰：凸化後輪廓；紅：真值</span></div>
+          <div class="column-label"><strong>SIRT 500</strong><span class="truth-key">紅：真值</span></div>
+          <div class="column-label"><strong>TV 1500</strong><span class="truth-key">紅：真值</span></div>
           <div class="column-label"><strong>幾何包絡法</strong><span>灰：輸出 R；藍：外 P；黃：內 Q；紅：真值</span></div>
 
           <div class="row-label"><strong>4 angles</strong><span>0°–135°</span><em>極少角度</em></div>
           <figure class="visual-cell"><img src="assets/single_m4_truth.png" alt="四角度單凸體真值"></figure>
           <figure class="visual-cell"><img src="assets/single_m4_fbp_level.png" alt="四角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.134907</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_sirt500.png" alt="四角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_tv1500.png" alt="四角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.012433</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m4_envelope.png" alt="四角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.070286 · 界 0.074976</figcaption></figure>
 
           <div class="row-label"><strong>8 angles</strong><span>0°–157.5°</span><em>主實驗設定</em></div>
           <figure class="visual-cell"><img src="assets/single_m8_truth.png" alt="八角度單凸體真值"></figure>
           <figure class="visual-cell"><img src="assets/single_m8_fbp_level.png" alt="八角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.025129</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_sirt500.png" alt="八角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_tv1500.png" alt="八角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m8_envelope.png" alt="八角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.018117 · 界 0.020569</figcaption></figure>
 
           <div class="row-label"><strong>16 angles</strong><span>0°–168.75°</span><em>較密角度</em></div>
           <figure class="visual-cell"><img src="assets/single_m16_truth.png" alt="十六角度單凸體真值"></figure>
           <figure class="visual-cell"><img src="assets/single_m16_fbp_level.png" alt="十六角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.005055</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_sirt500.png" alt="十六角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_tv1500.png" alt="十六角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m16_envelope.png" alt="十六角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.008921 · 界 0.009267</figcaption></figure>
         </div>
       </div>
 
       <div class="data-card">
         <div class="data-card-copy">
-          <p class="eyebrow">ALL 9 SINGLE-BODY PHANTOMS</p>
-          <h3>九個單凸體的中位 Hausdorff 誤差</h3>
-          <p>外接端點 <em>P</em> 只使用零／正值位置；包絡法還使用每條線的弦長。4、8 角度時包絡中點的中位誤差低於 FBP 0.5；16 角度時略高。九個物體都是橢圓，不能推論所有凸體。</p>
+          <p class="eyebrow">SAME SINGLE-BODY CASE</p>
+          <h3>代表案例的 Hausdorff 誤差</h3>
+          <p><code>slender-r37</code>。SIRT 與 TV 使用端點外框 <em>P</em> 作遮罩、值域 [0,1]、固定 0.5 門檻，再取最大連通區的凸包。</p>
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>角度數</th><th>FBP 0.5</th><th>外接端點 P</th><th>包絡中點 R</th><th>保證界 ½ dH(P,Q)</th></tr></thead>
+            <thead><tr><th>角度數</th><th>FBP 0.5</th><th>SIRT 500</th><th>TV 1500</th><th>包絡中點 R</th><th>保證界</th></tr></thead>
             <tbody>
-              <tr><th>4</th><td>0.096696</td><td>0.112633</td><td class="best">0.055557</td><td>0.057502</td></tr>
-              <tr><th>8</th><td>0.025129</td><td>0.038672</td><td class="best">0.018032</td><td>0.020402</td></tr>
-              <tr><th>16</th><td class="best">0.006106</td><td>0.013219</td><td>0.006335</td><td>0.007986</td></tr>
+              <tr><th>4</th><td>0.134907</td><td class="best">0.008285</td><td>0.012433</td><td>0.070286</td><td>0.074976</td></tr>
+              <tr><th>8</th><td>0.025129</td><td class="best">0.008285</td><td class="best">0.008285</td><td>0.018117</td><td>0.020569</td></tr>
+              <tr><th>16</th><td class="best">0.005055</td><td>0.008285</td><td>0.008285</td><td>0.008921</td><td>0.009267</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="footnote">同一批解析 Radon 樣本，Δs=0.01；FBP 使用固定 0.5 門檻、取與中心連通的輪廓再凸化，兩法都使用凸先驗。包絡法不知道橢圓參數；真值只供評估。HD 以 4096 個支撐方向數值評估，浮點包絡界未經區間算術認證。另以 9 個非橢圓凸多邊形設定檢查包含與誤差界。<a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/results/SINGLE_BODY_METHOD.md">方法與證明</a> · <a href="assets/single_envelope_metrics.json">下載完整數值</a>。</p>
+        <p class="footnote">全部方法使用相同解析 Radon 資料，Δs=0.01。真值只用於事後 HD 評估。包絡界未經區間算術認證。<a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/results/SINGLE_BODY_METHOD.md">方法與證明</a> · <a href="assets/single_five_column_metrics.json">SIRT／TV 數值</a> · <a href="assets/single_envelope_metrics.json">包絡數值</a>。</p>
       </div>
     </section>
 
@@ -184,12 +192,12 @@
         <h2>這張圖能說什麼，不能說什麼</h2>
       </div>
       <div class="note-grid">
-        <article><span>01</span><h3>同列可比</h3><p>同一列的方法使用同一份 sinogram；雙凸體像素法共享初始外框、值域與分割規則。</p></article>
+        <article><span>01</span><h3>同列可比</h3><p>同一列使用同一份 sinogram。SIRT 與 TV 共享端點外框、值域、門檻與凸化規則。</p></article>
         <article><span>02</span><h3>跨區勿混比</h3><p>單凸體與雙凸體不是同一案例集，誤差只能在各自實驗協定內解讀。</p></article>
         <article><span>03</span><h3>紅線不是輸入</h3><p>紅色真值邊界只在完成重建後用於視覺疊圖與誤差評估。</p></article>
         <article><span>04</span><h3>尚未涵蓋 DALM</h3><p>目前已實跑 FBP、SIRT 與指定 TV；DALM、TVR-DART 尚未取得可填入的誤差。</p></article>
       </div>
-      <p class="source-line">數值來源：單凸體 <code>single_envelope_metrics.json</code>；雙凸體 <code>submission_gate_20260923</code>、<code>quick_baselines_20260929</code>。<a href="assets/gallery_metrics.json">下載本頁圖像指標 JSON</a></p>
+      <p class="source-line">數值來源：單凸體 <code>single_envelope_metrics.json</code>、<code>single_five_column_metrics.json</code>；雙凸體 <code>submission_gate_20260923</code>、<code>quick_baselines_20260929</code>。</p>
     </section>
   </main>
 
