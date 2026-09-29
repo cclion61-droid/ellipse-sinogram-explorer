@@ -50,7 +50,7 @@
           <p class="eyebrow">01 · SINGLE CONVEX BODY</p>
           <h2>單凸體：同一份 sinogram 的五欄比較</h2>
         </div>
-        <p>每一列使用同一份無雜訊投影資料。像素法固定使用 0.5 門檻與凸化後處理。</p>
+        <p>橢圓比較 4、8、16 個角度；三角形與不規則六邊形使用 8 個角度。每列使用同一份無雜訊投影資料。</p>
       </div>
 
       <div class="single-model">
@@ -68,26 +68,40 @@
           <div class="column-label"><strong>TV 1500</strong><span class="truth-key">紅：真值</span></div>
           <div class="column-label"><strong>幾何包絡法</strong><span>灰：輸出 R；藍：外 P；黃：內 Q；紅：真值</span></div>
 
-          <div class="row-label"><strong>4 angles</strong><span>0°–135°</span><em>極少角度</em></div>
+          <div class="row-label"><strong>橢圓 · 4 angles</strong><span>0°–135°</span><em>極少角度</em></div>
           <figure class="visual-cell"><img src="assets/single_m4_truth.png" alt="四角度單凸體真值"></figure>
           <figure class="visual-cell"><img src="assets/single_m4_fbp_level.png" alt="四角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.134907</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m4_sirt500.png" alt="四角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m4_tv1500.png" alt="四角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.012433</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m4_envelope.png" alt="四角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.070286 · 界 0.074976</figcaption></figure>
 
-          <div class="row-label"><strong>8 angles</strong><span>0°–157.5°</span><em>主實驗設定</em></div>
+          <div class="row-label"><strong>橢圓 · 8 angles</strong><span>0°–157.5°</span><em>主實驗設定</em></div>
           <figure class="visual-cell"><img src="assets/single_m8_truth.png" alt="八角度單凸體真值"></figure>
           <figure class="visual-cell"><img src="assets/single_m8_fbp_level.png" alt="八角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.025129</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m8_sirt500.png" alt="八角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m8_tv1500.png" alt="八角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m8_envelope.png" alt="八角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.018117 · 界 0.020569</figcaption></figure>
 
-          <div class="row-label"><strong>16 angles</strong><span>0°–168.75°</span><em>較密角度</em></div>
+          <div class="row-label"><strong>橢圓 · 16 angles</strong><span>0°–168.75°</span><em>較密角度</em></div>
           <figure class="visual-cell"><img src="assets/single_m16_truth.png" alt="十六角度單凸體真值"></figure>
           <figure class="visual-cell"><img src="assets/single_m16_fbp_level.png" alt="十六角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.005055</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m16_sirt500.png" alt="十六角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m16_tv1500.png" alt="十六角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
           <figure class="visual-cell"><img src="assets/single_m16_envelope.png" alt="十六角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.008921 · 界 0.009267</figcaption></figure>
+
+          <div class="row-label"><strong>三角形 · 8 angles</strong><span>尖角凸體</span></div>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_truth.png" alt="八角度三角形真值" loading="lazy"></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_fbp.png" alt="八角度三角形 FBP 0.5 凸化輪廓與真值" loading="lazy"><figcaption>HD 0.101076</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_sirt500.png" alt="八角度三角形 SIRT 500 凸化輪廓與真值" loading="lazy"><figcaption class="winner">HD 0.023125</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_tv1500.png" alt="八角度三角形 TV 1500 凸化輪廓與真值" loading="lazy"><figcaption>HD 0.035377</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_envelope.png" alt="八角度三角形幾何內外包絡、中點重建與真值" loading="lazy"><figcaption>HD 0.078998 · 界 0.079962</figcaption></figure>
+
+          <div class="row-label"><strong>不規則六邊形 · 8 angles</strong><span>非對稱凸體</span></div>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_truth.png" alt="八角度不規則六邊形真值" loading="lazy"></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_fbp.png" alt="八角度不規則六邊形 FBP 0.5 凸化輪廓與真值" loading="lazy"><figcaption>HD 0.034990</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_sirt500.png" alt="八角度不規則六邊形 SIRT 500 凸化輪廓與真值" loading="lazy"><figcaption class="winner">HD 0.013696</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_tv1500.png" alt="八角度不規則六邊形 TV 1500 凸化輪廓與真值" loading="lazy"><figcaption>HD 0.021213</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_envelope.png" alt="八角度不規則六邊形幾何內外包絡、中點重建與真值" loading="lazy"><figcaption>HD 0.066149 · 界 0.066297</figcaption></figure>
         </div>
       </div>
 
@@ -107,7 +121,7 @@
             </tbody>
           </table>
         </div>
-        <p class="footnote">全部方法使用相同解析 Radon 資料，Δs=0.01。真值只用於事後 HD 評估。包絡界未經區間算術認證。<a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/results/SINGLE_BODY_METHOD.md">方法與證明</a> · <a href="assets/single_five_column_metrics.json">SIRT／TV 數值</a> · <a href="assets/single_envelope_metrics.json">包絡數值</a>。</p>
+        <p class="footnote">全部方法使用相同解析 Radon 資料，Δs=0.01。真值只用於事後 HD 評估。包絡界未經區間算術認證。<a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/results/SINGLE_BODY_METHOD.md">方法與證明</a> · <a href="assets/single_five_column_metrics.json">橢圓 SIRT／TV 數值</a> · <a href="assets/single_polygon_five_column_metrics.json">多邊形五欄數值</a> · <a href="assets/single_envelope_metrics.json">包絡數值</a>。</p>
       </div>
     </section>
 
