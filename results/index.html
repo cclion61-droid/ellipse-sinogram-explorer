@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="單凸體與雙凸體少角度 Radon 重建方法的逐圖與 Hausdorff 誤差比較">
+  <meta name="theme-color" content="#07111a">
+  <title>重建方法比較圖譜｜Radon Geometry Lab</title>
+  <link rel="stylesheet" href="results.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span><small>RADON GEOMETRY LAB</small><strong>重建方法比較圖譜</strong></span>
+    </a>
+    <nav aria-label="主要導覽">
+      <a href="#single">單凸體</a>
+      <a href="#double">雙凸體</a>
+      <a href="#limits">限制</a>
+      <a class="nav-quiet" href="../tutorial/index.html">逐步教學</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+      <p class="eyebrow">05 · VISUAL BENCHMARK · 2026-09-29</p>
+        <h1>同一份投影資料，<br>把每種方法放在同一列看。</h1>
+        <p class="lede">版面採論文常用的比較矩陣：列是案例或量測條件，欄是重建方法。所有圖片由已保存的實驗資料重建；紅線是評估用真值，不是演算法輸入。</p>
+      </div>
+      <aside class="hero-card" aria-label="評估摘要">
+        <p>主要指標</p>
+        <strong>Hausdorff distance</strong>
+        <span>越低越好</span>
+        <dl>
+          <div><dt>單凸體</dt><dd>9 形狀 × 8 種角度數</dd></div>
+          <div><dt>雙凸體</dt><dd>12 例；8 成功、4 失敗</dd></div>
+          <div><dt>資料</dt><dd>無雜訊，Δs = 0.01</dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <section id="single" class="benchmark-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">01 · SINGLE CONVEX BODY</p>
+          <h2>單凸體：角度變多時，邊界如何收斂</h2>
+        </div>
+        <p>代表案例：旋轉細長橢圓 <code>slender-r37</code>。端點法是一般凸多邊形版本，沒有使用橢圓擬合。</p>
+      </div>
+
+      <div class="matrix-scroll" role="region" aria-label="單凸體方法比較矩陣" tabindex="0">
+        <div class="comparison-grid single-grid">
+          <div class="corner-label">量測條件</div>
+          <div class="column-label"><strong>真值</strong><span>Truth</span></div>
+          <div class="column-label"><strong>FBP 0.5</strong><span>灰階重建</span></div>
+          <div class="column-label"><strong>端點幾何法</strong><span>局部端點擬合</span></div>
+          <div class="column-label"><strong>FBP 疊圖</strong><span class="truth-key">紅：真值</span></div>
+          <div class="column-label"><strong>端點法疊圖</strong><span class="truth-key">紅：真值</span></div>
+
+          <div class="row-label"><strong>4 angles</strong><span>0°–135°</span><em>極少角度</em></div>
+          <figure class="visual-cell"><img src="assets/single_m4_truth.png" alt="四角度單凸體案例的真實橢圓"></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_fbp.png" alt="四角度 FBP 重建"><figcaption>HD 0.134907</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_endpoint.png" alt="四角度端點幾何重建"><figcaption>HD 0.142534</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_fbp_overlay.png" alt="四角度 FBP 與真值邊界疊圖"><figcaption>星狀角度偽影</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_endpoint_overlay.png" alt="四角度端點幾何法與真值邊界疊圖"><figcaption>支撐多邊形偏粗</figcaption></figure>
+
+          <div class="row-label"><strong>8 angles</strong><span>0°–157.5°</span><em>主實驗設定</em></div>
+          <figure class="visual-cell"><img src="assets/single_m8_truth.png" alt="八角度單凸體案例的真實橢圓"></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_fbp.png" alt="八角度 FBP 重建"><figcaption>HD 0.025129</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_endpoint.png" alt="八角度端點幾何重建"><figcaption>HD 0.032579</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_fbp_overlay.png" alt="八角度 FBP 與真值邊界疊圖"><figcaption>偽影下降</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_endpoint_overlay.png" alt="八角度端點幾何法與真值邊界疊圖"><figcaption>邊界開始貼合</figcaption></figure>
+
+          <div class="row-label"><strong>16 angles</strong><span>0°–168.75°</span><em>較密角度</em></div>
+          <figure class="visual-cell"><img src="assets/single_m16_truth.png" alt="十六角度單凸體案例的真實橢圓"></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_fbp.png" alt="十六角度 FBP 重建"><figcaption>HD 0.005055</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_endpoint.png" alt="十六角度端點幾何重建"><figcaption>HD 0.009130</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_fbp_overlay.png" alt="十六角度 FBP 與真值邊界疊圖"><figcaption>輪廓接近真值</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_endpoint_overlay.png" alt="十六角度端點幾何法與真值邊界疊圖"><figcaption>多邊形誤差縮小</figcaption></figure>
+        </div>
+      </div>
+
+      <div class="data-card">
+        <div class="data-card-copy">
+          <p class="eyebrow">ALL 9 SINGLE-BODY PHANTOMS</p>
+          <h3>九個單凸體的中位邊界誤差</h3>
+          <p>代表圖不能代替整體統計。一般端點法在 4、8、16 角度的中位誤差仍高於 FBP；只有額外假設形狀為橢圓的參數模型明顯較低。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>角度數</th><th>FBP 0.5</th><th>FBP oracle*</th><th>一般端點法</th><th>橢圓模型*</th></tr></thead>
+            <tbody>
+              <tr><th>4</th><td>0.096696</td><td>0.087422</td><td>0.107314</td><td class="best">0.004744</td></tr>
+              <tr><th>8</th><td>0.025129</td><td>0.022173</td><td>0.032579</td><td class="best">0.002717</td></tr>
+              <tr><th>16</th><td>0.006106</td><td>0.004578</td><td>0.009130</td><td class="best">0.002101</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="footnote">* FBP oracle 用真值選門檻，只作診斷；橢圓模型使用正確形狀族先驗，不能代表一般凸體方法。</p>
+      </div>
+    </section>
+
+    <section id="double" class="benchmark-section section-dark">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">02 · TWO CONVEX BODIES</p>
+          <h2>雙凸體：同一份總 sinogram 的五欄比較</h2>
+        </div>
+        <p>三例皆使用 8 個無雜訊角度。像素法共享相同初始外框與 0.5 分割規則；幾何欄顯示中點輸出，紅線是真值、藍線是外包絡、黃線是內包絡。</p>
+      </div>
+
+      <div class="matrix-scroll" role="region" aria-label="雙凸體方法比較矩陣" tabindex="0">
+        <div class="comparison-grid double-grid">
+          <div class="corner-label">案例</div>
+          <div class="column-label"><strong>真值</strong><span>Truth</span></div>
+          <div class="column-label"><strong>FBP 0.5</strong><span class="truth-key">紅：真值</span></div>
+          <div class="column-label"><strong>SIRT 500</strong><span class="truth-key">紅：真值</span></div>
+          <div class="column-label"><strong>TV 1500</strong><span class="truth-key">紅：真值</span></div>
+          <div class="column-label"><strong>幾何包絡法</strong><span>紅／藍／黃：真值／外／內</span></div>
+
+          <div class="row-label"><strong>尖角</strong><span><code>corners_0</code></span><em>三角形＋四邊形</em></div>
+          <figure class="visual-cell"><img src="assets/double_corners_0_truth.png" alt="尖角雙凸體真值"></figure>
+          <figure class="visual-cell"><img src="assets/double_corners_0_fbp.png" alt="尖角案例 FBP 與真值疊圖"><figcaption>HD 0.101903</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_corners_0_sirt500.png" alt="尖角案例 SIRT 與真值疊圖"><figcaption>HD 0.021102</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_corners_0_tv.png" alt="尖角案例 TV 與真值疊圖"><figcaption>HD 0.033196</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_corners_0_geometry.png" alt="尖角案例幾何包絡與真值疊圖"><figcaption class="winner">HD 0.001257 · 界 0.001268</figcaption></figure>
+
+          <div class="row-label"><strong>細長</strong><span><code>thin_0</code></span><em>低厚度凸體</em></div>
+          <figure class="visual-cell"><img src="assets/double_thin_0_truth.png" alt="細長雙凸體真值"></figure>
+          <figure class="visual-cell"><img src="assets/double_thin_0_fbp.png" alt="細長案例 FBP 與真值疊圖"><figcaption>HD 0.056532</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_thin_0_sirt500.png" alt="細長案例 SIRT 與真值疊圖"><figcaption>HD 0.024190</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_thin_0_tv.png" alt="細長案例 TV 與真值疊圖"><figcaption>HD 0.040913</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_thin_0_geometry.png" alt="細長案例幾何包絡與真值疊圖"><figcaption class="winner">HD 0.003025 · 界 0.004657</figcaption></figure>
+
+          <div class="row-label"><strong>小間距</strong><span><code>small_gap_0</code></span><em>可初始化成功例</em></div>
+          <figure class="visual-cell"><img src="assets/double_small_gap_0_truth.png" alt="小間距雙凸體真值"></figure>
+          <figure class="visual-cell"><img src="assets/double_small_gap_0_fbp.png" alt="小間距案例 FBP 與真值疊圖"><figcaption>HD 0.291328</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_small_gap_0_sirt500.png" alt="小間距案例 SIRT 與真值疊圖"><figcaption>HD 0.018744</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_small_gap_0_tv.png" alt="小間距案例 TV 與真值疊圖"><figcaption>HD 0.018744</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/double_small_gap_0_geometry.png" alt="小間距案例幾何包絡與真值疊圖"><figcaption class="winner">HD 0.000821 · 界 0.000892</figcaption></figure>
+        </div>
+      </div>
+
+      <div class="data-card data-card-dark">
+        <div class="data-card-copy">
+          <p class="eyebrow">SAME THREE DEVELOPMENT CASES</p>
+          <h3>三例共同基線的 component HD</h3>
+          <p>這是三個先前已檢視且成功初始化的開發案例。幾何法三例最低，但不足以推出對未知案例或其他參數設定的普遍優勢。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>方法</th><th>中位數</th><th>最大值</th></tr></thead>
+            <tbody>
+              <tr><th>幾何包絡法</th><td class="best">0.001257</td><td class="best">0.003025</td></tr>
+              <tr><th>FBP 0.5</th><td>0.101903</td><td>0.291328</td></tr>
+              <tr><th>SIRT 500</th><td>0.021102</td><td>0.024190</td></tr>
+              <tr><th>TV 1500</th><td>0.033196</td><td>0.040913</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="failure-panel">
+        <div>
+          <p class="eyebrow">FAILURE ACCOUNTING</p>
+          <h3>十二例中另有四例沒有幾何輸出</h3>
+          <p>四例都找不到「兩段正值、中間至少兩個零 detector 點」的可認證錨點。它們不列入上面的誤差中位數。</p>
+        </div>
+        <ul>
+          <li><code>small_gap_2</code><span>無雙區塊錨點</span></li>
+          <li><code>unresolved_gap_0</code><span>無雙區塊錨點</span></li>
+          <li><code>unresolved_gap_1</code><span>無雙區塊錨點</span></li>
+          <li><code>unresolved_gap_2</code><span>無雙區塊錨點</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="limits" class="notes-section">
+      <div>
+        <p class="eyebrow">READING THE FIGURE</p>
+        <h2>這張圖能說什麼，不能說什麼</h2>
+      </div>
+      <div class="note-grid">
+        <article><span>01</span><h3>同列可比</h3><p>同一列的方法使用同一份 sinogram；雙凸體像素法共享初始外框、值域與分割規則。</p></article>
+        <article><span>02</span><h3>跨區勿混比</h3><p>單凸體與雙凸體不是同一案例集，誤差只能在各自實驗協定內解讀。</p></article>
+        <article><span>03</span><h3>紅線不是輸入</h3><p>紅色真值邊界只在完成重建後用於視覺疊圖與誤差評估。</p></article>
+        <article><span>04</span><h3>尚未涵蓋 DALM</h3><p>目前已實跑 FBP、SIRT 與指定 TV；DALM、TVR-DART 尚未取得可填入的誤差。</p></article>
+      </div>
+      <p class="source-line">數值來源：<code>sparse_angle_endpoint_vs_fbp</code>、<code>submission_gate_20260923</code>、<code>quick_baselines_20260929</code>。<a href="assets/gallery_metrics.json">下載本頁圖像指標 JSON</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Radon Geometry Lab · 靜態比較頁 · 所有影像皆由專案內保存資料重新產生</p>
+  </footer>
+</body>
+</html>
