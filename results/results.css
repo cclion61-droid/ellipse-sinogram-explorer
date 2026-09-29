@@ -70,6 +70,7 @@ h1 { max-width: 930px; margin-bottom: 26px; font-family: Georgia, "Noto Serif TC
 .comparison-grid { display: grid; min-width: 1100px; gap: 5px; }
 .single-grid { min-width: 1100px; grid-template-columns: 145px repeat(5, minmax(170px, 1fr)); }
 .double-grid { grid-template-columns: 145px repeat(5, minmax(170px, 1fr)); }
+.separator-grid { grid-template-columns: 170px repeat(5, minmax(170px, 1fr)); }
 .corner-label, .column-label, .row-label { display: flex; justify-content: center; flex-direction: column; }
 .corner-label { align-items: flex-start; padding: 12px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .column-label { align-items: center; min-height: 65px; padding: 9px 8px; text-align: center; }
@@ -87,6 +88,9 @@ h1 { max-width: 930px; margin-bottom: 26px; font-family: Georgia, "Noto Serif TC
 .visual-cell img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
 .visual-cell figcaption { position: absolute; left: 8px; right: 8px; bottom: 8px; padding: 6px 8px; border: 1px solid rgba(255,255,255,.16); border-radius: 2px; color: #e7f0f3; background: rgba(3, 9, 13, .78); backdrop-filter: blur(8px); font-family: "SFMono-Regular", Consolas, monospace; font-size: 10px; text-align: center; }
 .visual-cell figcaption.winner { border-color: rgba(72,216,199,.5); color: #bafff5; }
+.visual-cell figcaption.conditional-result { border-color: rgba(212,154,36,.65); color: #ffe2a0; }
+.visual-cell figcaption.not-certified { border-color: rgba(217,72,79,.75); color: #ffc2c5; }
+.row-label em.status-bad { color: #ff858b; }
 
 .data-card { display: grid; grid-template-columns: minmax(250px, .75fr) minmax(500px, 1.4fr); gap: 34px; max-width: 1450px; margin: 38px auto 0; padding: 28px; border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow); }
 .data-card-dark { border-color: #263946; background: var(--dark-card); box-shadow: none; }
@@ -113,6 +117,9 @@ thead th { color: var(--muted); font-size: 10px; letter-spacing: .08em; text-tra
 .failure-card figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 9px 5px 3px; font-size: 12px; line-height: 1.5; }
 .failure-card figcaption strong { color: #f2c1c4; font-family: "SFMono-Regular", Consolas, monospace; }
 .failure-card figcaption span { color: #a9bac4; }
+.failure-panel .matrix-scroll { margin: 0; }
+.failure-note { margin: 18px 0 0; color: #a9bac4; font-size: 12px; line-height: 1.6; }
+.failure-note a { color: var(--teal-bright); }
 
 .notes-section { display: grid; grid-template-columns: .55fr 1.45fr; gap: 70px; max-width: 1450px; margin: 0 auto; padding: 90px clamp(20px, 5vw, 78px); }
 .note-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
