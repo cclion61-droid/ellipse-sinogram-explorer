@@ -1,0 +1,25 @@
+name: Check reconstruction geometry
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check tutorial/tutorial.js
+          node --check concave/page.js
+          node --check concave/worker.js
+      - name: Check enclosure and chord geometry
+        run: node --test tutorial/geometry.test.cjs concave/engine.test.cjs

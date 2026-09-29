@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="從 L 型的單一總 sinogram 搜尋未知切線，觀察凸片包絡重建的實測結果與限制。">
+  <title>L 型重建・未知切線實驗</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../tutorial/tutorial.css"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="site-nav" aria-label="研究頁面"><a href="../index.html">01 橢圓實驗室</a><a href="../tutorial/index.html">02 雙凸體教學</a><a href="index.html" aria-current="page">03 L 型・未知切線</a></nav>
+    <div class="title-row"><div><p class="eyebrow">CONCAVE RECONSTRUCTION / EXPERIMENT 01</p><h1>找不到空隙，就試著找切法</h1></div><a href="README.md" class="source-link">實驗規格與限制 ↗</a></div>
+    <p class="intro">L 型是連在一起的。先只留下總 sinogram，再搜尋一條切線，假設兩側各是凸片，用弦長限制重建。下面每條輪廓都來自實際計算。</p>
+  </header>
+  <main>
+    <section class="setup" aria-label="實驗設定">
+      <label>案例 <select id="case"><option value="8-0">L 型 · 8 角度</option><option value="4-0">L 型 · 4 角度</option><option value="8-22.5">旋轉 22.5° · 8 角度</option><option value="16-0">L 型 · 16 角度：搜尋失敗</option></select></label>
+      <button id="run" class="primary">重新搜尋切線</button>
+      <label class="check"><input id="truth" type="checkbox" checked> 疊加真值（只供評估）</label>
+    </section>
+    <p id="status" class="run-status" role="status">讀取已執行的實驗…</p>
+    <p class="plot-note">以下摘要固定顯示全域搜尋的最佳候選；下方可另外檢視各切法。</p>
+    <section class="metrics" aria-label="最佳候選摘要">
+      <article><span>總資料擬合誤差</span><strong id="residual">—</strong><small>相對 L₂；越低越好</small></article>
+      <article><span>形狀 IoU</span><strong id="iou">—</strong><small>257 × 257 網格；只供評估</small></article>
+      <article><span>候選切法</span><strong id="count">—</strong><small id="countNote">—</small></article>
+      <article><span>切後真體是否凸？</span><strong id="convexity">—</strong><small>真值事後檢查；不參與選擇</small></article>
+    </section>
+    <p id="finding" class="finding" role="status"></p>
+    <nav id="steps" class="steps" aria-label="實驗步驟"></nav>
+    <section class="lesson"><div class="lesson-heading"><h2 id="stepTitle"></h2><div class="paging"><button id="previous">← 上一步</button><button id="next" class="primary">下一步 →</button></div></div><p id="explanation" class="explanation"></p><div id="formula" class="formula"></div></section>
+    <div class="figures">
+      <section class="plot-panel">
+        <div class="panel-title"><h3>同一個 L 型，逐步看重建</h3><span id="cutLabel"></span></div>
+        <svg id="objects" viewBox="0 0 500 450" role="img" aria-label="真值、候選切線、凸片內外包絡與重建"></svg>
+        <div class="legend"><span><i class="key truth-key"></i>真值</span><span><i class="key" style="border-color:#e2773c"></i>切線</span><span><i class="key" style="border-color:#207c96"></i>第一片</span><span><i class="key" style="border-color:#8150a1"></i>第二片</span></div>
+        <label class="round-label">更新輪數 <output id="roundValue">0</output><input id="round" type="range" min="0" max="3" value="3"></label>
+        <p id="geometryNote" class="plot-note"></p>
+      </section>
+      <section class="plot-panel">
+        <div class="panel-title"><h3>只提供這一份總 sinogram</h3><span id="matrixSize"></span></div>
+        <svg id="sinogram" viewBox="0 0 440 240" role="img" aria-label="實測總 sinogram"></svg>
+        <label class="profile-label">檢查方向 <select id="angle"></select></label>
+        <svg id="profile" viewBox="0 0 440 205" role="img" aria-label="測量總長度與重建總長度比較"></svg>
+        <p class="plot-note">灰線：測量 g；紫線：重建後重新投影。誤差只用測量值計算，不讀真實形狀。</p>
+      </section>
+    </div>
+    <div class="figures secondary">
+      <section class="plot-panel">
+        <div class="panel-title"><h3>搜尋過哪些切線？</h3><button id="best" class="quiet">回到最佳候選</button></div>
+        <svg id="searchMap" viewBox="0 0 500 270" role="img" aria-label="候選切線的法向量角度與偏移位置"></svg>
+        <div class="legend"><span><i class="dot compatible"></i>未發現數值矛盾</span><span><i class="dot contradiction"></i>矛盾</span><span><i class="dot other"></i>略過／未解</span></div>
+        <label>檢視候選編號 <input type="number" id="candidate" min="0" value="0"><button id="inspect" class="quiet">檢視</button></label>
+        <p id="candidateNote" class="plot-note"></p>
+      </section>
+      <section class="plot-panel">
+        <h3>這次真正驗證了什麼？</h3>
+        <div class="table-wrap"><table><tbody id="checks"></tbody></table></div>
+        <p class="plot-note">「資料相容」只是未發現矛盾。選出的切線不一定讓真實兩片凸，因此內外距離半值不能自動當成已成立的誤差保證。</p>
+        <details><summary>為什麼 16 角度反而搜尋失敗？</summary><p>固定粗網格的候選切線可能錯過正確切法；增加量測後，不精確的候選更容易被排除。本版只在已有相容候選附近細化，因此可能停在「無候選」。這是搜尋的限制，不代表更多資料使問題更難。另以已知正確切線作診斷可以通過，但該診斷不列入未知切線成果。</p></details>
+      </section>
+    </div>
+    <section class="plot-panel results-panel">
+      <h3>相同設定下的四個實測案例</h3>
+      <div class="table-wrap"><table><thead><tr><th>案例</th><th>資料誤差</th><th>IoU</th><th>搜尋結果</th><th>真體凸分解</th></tr></thead><tbody id="comparison"></tbody></table></div>
+      <p class="plot-note">無雜訊、Δs = 0.04、91 個 detector；12 個切線法向量方向 × 17 個位置，最多 3 層局部細化，每個候選更新 3 輪。這是先導實驗，沒有 FBP／SIRT／TV 對照，也未證明速度優勢。</p>
+    </section>
+    <footer><p>重建引擎只接收 total、angles、detector。L 型頂點與切割答案留在模擬／評估端；更換真值疊圖不會改變搜尋結果。</p><button id="export">顯示／匯出本次完整 JSON</button><p><a href="README.md">讀實驗記錄</a> · <a href="engine.js">重建程式</a> · <a href="engine.test.cjs">數學操作測試</a></p></footer>
+    <section id="exportPanel" class="plot-panel" hidden><h3>可重現的計算紀錄</h3><a id="download" download="l-shape-experiment.json">下載 JSON</a><textarea id="exportText" rows="7" readonly aria-label="實驗 JSON"></textarea></section>
+  </main>
+  <noscript>此頁需要 JavaScript。</noscript>
+  <script src="../tutorial/geometry.js"></script><script src="engine.js"></script><script src="phantom.js"></script><script src="page.js"></script>
+</body></html>

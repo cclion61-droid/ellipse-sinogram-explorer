@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="從雙橢圓的總 sinogram 出發，逐步理解雙凸體的內外包絡重建。">
+  <title>雙凸體重建・一步一步看懂</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="tutorial.css">
+</head>
+<body>
+  <header class="header">
+    <a href="../index.html" class="back-link">← 橢圓實驗室</a>
+    <a href="../concave/index.html" class="back-link" style="margin-left:20px">第三頁・L 型未知切線 →</a>
+    <div class="title-row"><div><p class="eyebrow">FROM ONE TOTAL SINOGRAM</p><h1>雙凸體重建，一步一步看懂</h1></div><a href="README.md" class="source-link">閱讀說明與程式索引 ↗</a></div>
+    <p class="intro">先用兩個橢圓製造測量資料，再把橢圓參數藏起來。演算法只靠<strong>總長度＋凸性</strong>，逐步夾住兩個物體。</p>
+  </header>
+  <main>
+    <section class="setup" aria-label="教學範例設定">
+      <label>範例 <select id="preset"><option value="demo">兩個分離橢圓</option><option value="close">間距太小：初始化失敗</option></select></label>
+      <label>量測角度 <select id="views"><option value="4">4 個</option><option value="8" selected>8 個</option><option value="16">16 個</option></select></label>
+      <span class="setup-note">無雜訊 · Δs = 0.03 · 密度 0／1</span>
+      <label class="check"><input type="checkbox" id="truth" checked> 疊加真值（只供解說）</label>
+    </section>
+    <p id="runStatus" class="run-status" role="status">正在計算教學範例…</p>
+    <nav id="steps" class="steps" aria-label="演算法步驟"></nav>
+    <section class="lesson" aria-labelledby="stepTitle">
+      <div class="lesson-heading"><div><p id="stepCounter" class="eyebrow"></p><h2 id="stepTitle"></h2></div><div class="paging"><button id="previous" type="button">← 上一步</button><button id="next" class="primary" type="button">下一步 →</button></div></div>
+      <p id="explanation" class="explanation"></p>
+      <div id="formula" class="formula" aria-live="polite"></div>
+      <p id="knowledge" class="knowledge"></p>
+    </section>
+    <section id="failure" class="failure" role="alert" hidden></section>
+    <div class="figures">
+      <section class="plot-panel object-panel" aria-labelledby="objectTitle">
+        <div class="panel-title"><h3 id="objectTitle">物體平面</h3><span id="objectSubtitle"></span></div>
+        <svg id="objects" viewBox="0 0 520 460" role="img" aria-labelledby="objectTitle"></svg>
+        <div class="legend"><span><i class="key truth-key"></i>真值（不給演算法）</span><span><i class="key outer-key"></i>外包絡 P</span><span><i class="key inner-key"></i>內包絡 Q</span><span><i class="key output-key"></i><span id="outputLegend">重建輪廓</span></span></div>
+        <p id="objectNote" class="plot-note"></p>
+        <div id="zoomPanel" hidden><h4>被裁掉的角落・局部放大</h4><svg id="cutZoom" viewBox="0 0 420 220" role="img" aria-label="實際裁切事件的局部放大"></svg></div>
+      </section>
+      <section class="plot-panel data-panel" aria-labelledby="sinoTitle">
+        <div class="panel-title"><h3 id="sinoTitle">同一份總 sinogram</h3><span id="matrixSize"></span></div>
+        <svg id="sinogram" viewBox="0 0 420 235" role="img" aria-label="橫軸為角度、縱軸為 detector 位置，色彩表示總弦長"></svg>
+        <div class="data-controls">
+          <label>方向 φ <select id="angle"></select></label>
+          <label>射線 s = <output id="sValue"></output><input id="detector" type="range" min="0" max="120" value="60" step="1"></label>
+        </div>
+        <button id="exampleRay" class="quiet" type="button">回到本步示範射線</button>
+        <h4 id="profileTitle">目前方向的測量值 g(s)</h4>
+        <svg id="profile" viewBox="0 0 420 180" role="img" aria-labelledby="profileTitle"></svg>
+        <p id="dataNote" class="plot-note"></p>
+      </section>
+    </div>
+    <section id="intervalPanel" class="plot-panel interval-panel" aria-labelledby="intervalTitle">
+      <div class="panel-title"><h3 id="intervalTitle">把這條射線攤成一維</h3><label id="bodyControl">看哪個物體 <select id="body"><option value="0">物體 1</option><option value="1">物體 2</option></select></label></div>
+      <svg id="intervals" viewBox="0 0 900 230" role="img" aria-labelledby="intervalTitle"></svg>
+      <p id="intervalNote" class="plot-note"></p>
+    </section>
+    <section id="roundPanel" class="plot-panel" hidden>
+      <label class="round-label">目前顯示第 <output id="roundValue">0</output> 輪 <input id="round" type="range" min="0" max="3" value="0" step="1"></label>
+      <div class="table-wrap"><table><thead><tr><th>輪數</th><th>有效裁切數</th><th>條件性誤差上界 ε</th></tr></thead><tbody id="history"></tbody></table></div>
+      <p class="plot-note">第 0 輪是初始內外包絡。上界縮小，不代表真實誤差每輪都下降；也不保證最終收斂到真值。</p>
+    </section>
+    <details class="details"><summary>這個教學做了什麼、沒有做什麼？</summary>
+      <p>兩個預設物體均互不相交，因此二值聯集的 Radon 資料等於兩個弦長相加。橢圓只用來產生資料；重建輸出是一般凸多邊形，沒有橢圓擬合。角度覆蓋 [0, π)，不是 limited-angle。</p>
+      <p>已知恰有兩個互不相交、密度為 1 的凸體，且位於 [-1.8, 1.8]²。每個物體在每個量測方向的投影寬度須大於 Δs，detector 覆蓋須完整。這些是模型假設，不是模型自動辨識的結果。</p>
+      <p>若找不到中間至少兩個零取樣點的分離投影，或內包絡沒有面積，就停止並顯示失敗。不使用真實分離線補救。</p>
+      <p>誤差上界以包含關係正確為前提，數學證明使用精確運算；此 JavaScript 實作使用浮點容差，不是嚴格機器認證。它是解說用範例，不是新增的性能比較實驗。</p>
+      <p>來源：本專案 Python 原型 <code>validate_geometric_completion.py</code> 與 <code>research_chain_audit.py</code> 的教學移植；幾何基礎參見 <a href="https://doi.org/10.1007/BF02187723" target="_blank" rel="noopener">Kölzow–Kuba–Volčič (1989)</a>。不宣稱內外包絡原理為本研究首創。</p>
+    </details>
+    <div class="paging bottom-paging"><button id="previousBottom" type="button">← 上一步</button><button id="nextBottom" class="primary" type="button">下一步 →</button></div>
+    <footer><p>讀圖順序：先看一句解釋 → 看平面上的線 → 看下方的一維區間 → 再按下一步。</p><button id="download" type="button">顯示／匯出本次計算 JSON</button><p>本頁不載入外部套件、不上傳資料；可離線開啟。</p></footer>
+    <section id="exportPanel" class="plot-panel" hidden aria-labelledby="exportTitle">
+      <h3 id="exportTitle">本次輸入與計算紀錄</h3>
+      <p id="exportStatus" role="status"></p>
+      <p><a id="saveJson" download="two-body-tutorial-trace.json">儲存 JSON 檔案</a>。若內建瀏覽器未提供下載，請複製下方完整文字，另存為 <code>.json</code>。</p>
+      <textarea id="exportText" aria-label="完整計算紀錄 JSON" readonly rows="8" style="width:100%;font-family:monospace;font-size:12px;margin-top:12px"></textarea>
+    </section>
+  </main>
+  <noscript>本教學需要 JavaScript 來計算並顯示幾何步驟。</noscript>
+  <script src="geometry.js"></script><script src="phantom.js"></script><script src="tutorial.js"></script>
+</body>
+</html>

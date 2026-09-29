@@ -1,0 +1,18 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const C = require('./engine.js');
+const P = require('./phantom.js');
+const views = Number(process.argv[2] || 8);
+const rotation = Number(process.argv[3] || 0);
+const truth = P.shape(rotation*Math.PI/180), data = P.makeData(truth,views);
+const start = performance.now();
+const result = C.search(data,{},p=>{if(p.tried%60===0) console.log(p);});
+const elapsedSeconds = (performance.now()-start)/1000;
+const evaluation = P.evaluate(truth,result);
+const diagnostic=C.cutCandidate(data,result.global,rotation*Math.PI/180,-.35,3);
+const oracleCutDiagnostic={purpose:'Diagnosis only; supplied true cut; EXCLUDED from candidate search and reported unknown-cut accuracy.',status:diagnostic.status,residual:diagnostic.score??null,bound:diagnostic.bound??null};
+const engineSha256=require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(__dirname,'engine.js'))).digest('hex');
+const artifact = {protocol:{date:'2026-09-29',views,rotationDegrees:rotation,spacing:.04,noise:0,truthAccess:'Only simulator and evaluation; search receives total, angles, detector.',elapsedSeconds,engineSha256},data,truth,result,evaluation,oracleCutDiagnostic};
+const destination=path.join(__dirname,'result-'+views+'-'+rotation+'.json');
+fs.writeFileSync(destination,JSON.stringify(artifact));
+console.log(JSON.stringify({destination,elapsedSeconds,counts:result.counts,best:result.best?{phi:result.best.phi,offset:result.best.offset,residual:result.best.score,bound:result.best.bound}:null,evaluation},null,2));
