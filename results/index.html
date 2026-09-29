@@ -28,7 +28,7 @@
       <div class="hero-copy">
       <p class="eyebrow">RECONSTRUCTION COMPARISON · 2026-09-29</p>
         <h1>同一份投影資料，<br>把每種方法放在同一列看。</h1>
-        <p class="lede">先看雙凸體，再看單凸體對照與初始化失敗。紅線只供評估，不是重建輸入。</p>
+        <p class="lede">單凸體作基準，重點看雙凸體比較與初始化失敗。紅線只供評估，不是重建輸入。</p>
       </div>
       <aside class="hero-card" aria-label="評估摘要">
         <p>主要指標</p>
@@ -167,7 +167,7 @@
         <div class="failure-heading">
           <p class="eyebrow">FAILURE ACCOUNTING</p>
           <h3>四個沒有幾何輸出的案例</h3>
-          <p>圖左是診斷用真值；圖右是最佳量測角的總弦長。紅帶表示兩體投影仍重疊，正值沒有分成兩段，因此無法建立雙區塊錨點。這四例不計入成功案例誤差。</p>
+          <p>圖左是真值，圖右是事後選出的最接近分離量測角。紅帶表示投影仍重疊，正值沒有分成兩段，無法建立雙區塊錨點。四例不計入成功案例誤差。</p>
         </div>
         <div class="failure-grid">
           <figure class="failure-card"><img src="assets/failure_small_gap_2.png" alt="small_gap_2：兩個真值凸體及最佳量測角的單段正值曲線，兩體投影仍重疊" loading="lazy"><figcaption><strong>small_gap_2</strong><span>最佳量測角投影仍重疊 0.0081；可分離方向落在角度網格之間。</span></figcaption></figure>
