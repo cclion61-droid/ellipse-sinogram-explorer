@@ -1,6 +1,6 @@
 # Radon Geometry Lab
 
-目前主線是[單凸體基礎](single/index.html)、[雙凸體延伸](tutorial/index.html)與[方法比較](results/index.html)。L 型切法研究保留為獨立工具。
+目前主線是[單凸體基礎](single/index.html)、[雙凸體延伸](tutorial/index.html)、[方法比較](results/index.html)與[分離線搜尋驗證](separator/index.html)。L 型切法研究保留為獨立工具。
 
 ## 單凸體重建
 
@@ -13,6 +13,10 @@
 ## 重建方法比較
 
 開啟 **[results/index.html](results/index.html)**。單凸體使用相同的內外包絡原理：總弦長直接建立內包絡，不需分離視角；此頁展示一輪包絡與 FBP 0.5 對照。雙凸體另做交替細化，並比較 FBP、SIRT 與指定 TV，附四個初始化失敗案例。真值只供事後評估；失敗案例不併入成功誤差統計。
+
+## 分離線搜尋驗證
+
+開啟 **[separator/index.html](separator/index.html)**。在總 sinogram 沒有可見零間隙時，以未知分離線假設產生兩體包絡，透過量測矛盾排除不相容分支。四個既有失敗例都能產生二維內種子；但最低殘差分支不一定包含真值，因此目前只能宣稱可行初始化。理論認證必須保留所有未被安全排除的分離線參數盒，再計算跨分支誤差界。
 
 ## 其他研究：L 型切法最佳化
 
