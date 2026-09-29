@@ -11,9 +11,10 @@
 <body>
   <header class="header">
     <a href="../index.html" class="back-link">← 研究首頁</a>
+    <a href="../single/index.html" class="back-link" style="margin-left:20px">單凸體教學 →</a>
     <a href="../results/index.html" class="back-link" style="margin-left:20px">重建方法比較 →</a>
     <div class="title-row"><div><p class="eyebrow">FROM ONE TOTAL SINOGRAM</p><h1>雙凸體重建，一步一步看懂</h1></div><a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/tutorial/README.md" class="source-link">閱讀說明與程式索引 ↗</a></div>
-    <p class="intro">先用兩個橢圓製造測量資料，再把橢圓參數藏起來。演算法只靠<strong>總長度＋凸性</strong>，逐步夾住兩個物體。</p>
+    <p class="intro">先用兩個橢圓製造測量資料，再把橢圓參數藏起來。演算法只看到<strong>一張總 sinogram</strong>，在可分離初始化的條件下，用總長度與凸性逐步夾住兩個物體。</p>
   </header>
   <main>
     <section class="setup" aria-label="教學範例設定">
@@ -23,6 +24,13 @@
       <label class="check"><input type="checkbox" id="truth" checked> 疊加真值（只供解說）</label>
     </section>
     <p id="runStatus" class="run-status" role="status">正在計算教學範例…</p>
+    <section class="method-map" aria-label="雙凸體方法的邏輯地圖">
+      <article><strong>輸入</strong><p>只有總弦長 <em>g=r₁+r₂</em>；演算法不知道個別 <em>r₁,r₂</em>，也不知道橢圓參數。</p></article>
+      <article><strong>啟動條件</strong><p>至少一個量測方向出現兩段可解析的正值區塊，才能建立有標籤的外包絡 <em>P₁,P₂</em>。</p></article>
+      <article><strong>始終維持</strong><p><em>Qᵢ⊆Dᵢ⊆Pᵢ</em>。另一體的外框給本體弦長下界；另一體的內框給本體弦長上界。</p></article>
+      <article><strong>停止與輸出</strong><p>無分離方向或內框無面積就停止。成功時輸出兩個中點體的聯集，不把兩體再取整體凸包。</p></article>
+    </section>
+    <p class="literature-note"><strong>與 1989 文獻的關係：</strong>Kölzow–Kuba–Volčič 提供單凸體 core/envelope 的遞迴原理；本頁的雙凸體弦長分配與可分離初始化是條件性延伸，不是該論文既有的雙凸體演算法。先讀<a href="../single/index.html">單凸體七步教學</a>會更容易。</p>
     <nav id="steps" class="steps" aria-label="演算法步驟"></nav>
     <section class="lesson" aria-labelledby="stepTitle">
       <div class="lesson-heading"><div><p id="stepCounter" class="eyebrow"></p><h2 id="stepTitle"></h2></div><div class="paging"><button id="previous" type="button">← 上一步</button><button id="next" class="primary" type="button">下一步 →</button></div></div>
@@ -67,7 +75,7 @@
       <p>已知恰有兩個互不相交、密度為 1 的凸體，且位於 [-1.8, 1.8]²。每個物體在每個量測方向的投影寬度須大於 Δs，detector 覆蓋須完整。這些是模型假設，不是模型自動辨識的結果。</p>
       <p>若找不到中間至少兩個零取樣點的分離投影，或內包絡沒有面積，就停止並顯示失敗。不使用真實分離線補救。</p>
       <p>誤差上界以包含關係正確為前提，數學證明使用精確運算；此 JavaScript 實作使用浮點容差，不是嚴格機器認證。它是解說用範例，不是新增的性能比較實驗。</p>
-      <p>來源：本專案 Python 原型 <code>validate_geometric_completion.py</code> 與 <code>research_chain_audit.py</code> 的教學移植；幾何基礎參見 <a href="https://doi.org/10.1007/BF02187723" target="_blank" rel="noopener">Kölzow–Kuba–Volčič (1989)</a>。不宣稱內外包絡原理為本研究首創。</p>
+      <p>來源：本專案 Python 原型 <code>validate_geometric_completion.py</code> 與 <code>research_chain_audit.py</code> 的教學移植；單凸體 core/envelope 幾何基礎參見 <a href="https://doi.org/10.1007/BF02187723" target="_blank" rel="noopener">Kölzow–Kuba–Volčič (1989)</a>。本頁不是該論文 Algorithm E 的完整實作；雙凸體總弦長界與初始化是本專案目前研究原型。</p>
     </details>
     <div class="paging bottom-paging"><button id="previousBottom" type="button">← 上一步</button><button id="nextBottom" class="primary" type="button">下一步 →</button></div>
     <footer><p>讀圖順序：先看一句解釋 → 看平面上的線 → 看下方的一維區間 → 再按下一步。</p><button id="download" type="button">顯示／匯出本次計算 JSON</button><p>本頁不載入外部套件、不上傳資料；可離線開啟。</p></footer>

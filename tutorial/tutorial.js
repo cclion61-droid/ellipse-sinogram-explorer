@@ -73,11 +73,11 @@
       formula=`本方向的條帶：${f(lo,2)} ≤ x cos φ + y sin φ ≤ ${f(hi,2)}<br><span class="small">橘色多邊形 = 所有方向條帶 ∩ 已知視野；不是最後重建。</span>`;
     } else if(step===3) {
       const a=result.init.anchor, runs=result.init.runs[a], zeros=runs[1][0]-runs[0][1]-1;
-      explanation='這個方向出現兩段正值，中間至少有兩個零取樣。凸體的投影不會斷成兩段，因此在「恰有兩個凸體，且每體都有被取樣」的假設下，兩段來自不同物體。各自往外擴一格，再與全域外框相交。';
+      explanation='這個方向出現兩段正值，中間至少有兩個零取樣。單一凸體在固定方向的正值支撐只能是一段，因此在「恰有兩個凸體、密度為 1，且兩體在本方向都有正值樣本」的假設下，兩段分屬不同物體。各段往外擴一格，再與全域外框相交，才得到有標籤的 P₁、P₂。';
       formula=`分離方向 φ = ${deg(data.angles[a])}°；中間有 ${zeros} 個零取樣<br><span class="small">P₁、P₂ 已有標籤；另有 ${result.init.assignments.length-1} 個方向完成唯一配對，${result.init.ambiguous.length} 個仍有歧義，先跳過。</span>`;
-      knowledge='圖中已加入能唯一配對的其他分離方向。不拿真值判斷標籤；更不能把此方向的左右順序套到所有方向。';
+      knowledge='其他分離方向只在兩種配對中恰有一種保持兩個外框非空時才採用；若兩種都可行就標記為歧義並跳過。不拿真值判斷標籤，也不把左右順序直接套到其他方向。';
     } else if(step===4 && ray) {
-      explanation=`這條線的總長度是 g。另一個物體最多只能占滿自己的外框弦，長度為 c${O}。扣掉這個最大貢獻，物體 ${I} 至少要有 L${I} 這麼長。在本體外框弦 [a,b] 裡，所有長度至少 L${I} 的可能線段，都必須包含 [b−L${I}, a+L${I}]（若非空）。`;
+      explanation=`這條線只量到 g=r₁+r₂，不能直接分解。因為物體 ${O} 的真弦被它的外框弦包住，所以 r${O}≤c${O}；因此 r${I}=g−r${O}≥g−c${O}。得到安全下界 L${I} 後，在本體外框弦 [a,b] 中，所有長度至少 L${I} 的可行線段共同包含 [b−L${I}, a+L${I}]（若非空）。`;
       formula=`L${I} = max(0, g − c${O}) ≈ max(0, ${f(ray.g)} − ${f(ray.c[other])}) = <strong>${f(ray.lower[i])}</strong><br><span class="small">${ray.mandatory[i]?`必存區間 = [${f(ray.mandatory[i][0])}, ${f(ray.mandatory[i][1])}]`:'此射線沒有正長度的必存區間；不能硬加內部點。'}</span>`;
     } else if(step===5) {
       const counts=result.seed.segments.map(x=>x.length), mixed=result.seed.segments.flat().filter(x=>x.mixed).length;
@@ -86,7 +86,7 @@
       knowledge='內包絡至少要有三個不共線的點，後續二維裁切才啟動。線段端點不是橢圓真值取樣點。';
     } else if((step===6 || step===7) && ray && result.event) {
       const ev=result.event, [a,b]=ray.innerIntervals[i], U=ray.upper[i];
-      if(step===6) explanation=`現在另一體已知至少貢獻 q${O}，所以本體的弦長最多是 U${I} = g − q${O}。本體又必須包含綠色內弦 [a,b]，因此整條真實弦只能落在 [b−U${I}, a+U${I}]。再往外一點的紅點 z，就確定不屬於物體 ${I}。`;
+      if(step===6) explanation=`現在物體 ${O} 的內框弦長是 q${O}，而真弦滿足 r${O}≥q${O}，所以 r${I}=g−r${O}≤g−q${O}=:U${I}。物體 ${I} 又必須包含自己的綠色內弦 [a,b]，因此其真弦只能落在 [b−U${I}, a+U${I}]；範圍外的紅點 z 確定不屬於物體 ${I}。`;
       else explanation=`若物體 ${I} 包含紅色陰影裡的某個點 x，又包含綠色內框，凸性就會迫使它包含已知外部點 z，造成矛盾。因此陰影是禁區。我們裁去禁區後再取凸包，保留一個安全的凸外框；這個操作可能恢復部分被刪區域，不保證每次都有進展。`;
       formula=`U${I} = g − q${O} ≈ ${f(ray.g)} − ${f(ray.q[other])} = <strong>${f(U)}</strong><br><span class="small">可容許弦範圍 [${f(b-U)}, ${f(a+U)}]；z 的 t 座標 ${f(ev.t,8)}（在範圍外加微小裕量）。</span>`;
       knowledge=`為展示混合弦長如何用於裁切，這裡跳到實際第 ${ev.round} 輪、物體 ${I} 的一筆事件；先前射線已更新過外框。此步鎖定射線，不是示意假切。`;
