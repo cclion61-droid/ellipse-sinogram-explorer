@@ -62,10 +62,14 @@ h1 { max-width: 930px; margin-bottom: 26px; font-family: Georgia, "Noto Serif TC
 .section-head h2, .notes-section h2 { margin-bottom: 0; font-family: Georgia, "Noto Serif TC", serif; font-size: clamp(30px, 3.4vw, 52px); font-weight: 500; letter-spacing: -.035em; }
 .section-head > p { max-width: 580px; margin-bottom: 3px; color: var(--muted); line-height: 1.7; }
 .section-dark .section-head > p { color: #93a9b6; }
+.single-model { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; max-width: 1450px; margin: 0 auto 30px; }
+.single-model p { margin: 0; padding: 18px 20px; border: 1px solid var(--line); background: var(--card); color: var(--muted); font-size: 13px; line-height: 1.7; }
+.single-model strong { color: var(--ink); }
 
 .matrix-scroll { max-width: 1450px; margin: 0 auto; padding-bottom: 8px; overflow-x: auto; scrollbar-color: var(--teal) transparent; }
 .comparison-grid { display: grid; min-width: 1100px; gap: 5px; }
-.single-grid, .double-grid { grid-template-columns: 145px repeat(5, minmax(170px, 1fr)); }
+.single-grid { min-width: 780px; grid-template-columns: 145px repeat(3, minmax(190px, 1fr)); }
+.double-grid { grid-template-columns: 145px repeat(5, minmax(170px, 1fr)); }
 .corner-label, .column-label, .row-label { display: flex; justify-content: center; flex-direction: column; }
 .corner-label { align-items: flex-start; padding: 12px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .column-label { align-items: center; min-height: 65px; padding: 9px 8px; text-align: center; }
@@ -124,6 +128,7 @@ footer { padding: 25px; color: #82909a; background: var(--dark); font-size: 11px
   .hero { grid-template-columns: 1fr; }
   .hero-card { max-width: 520px; }
   .section-head { align-items: flex-start; flex-direction: column; }
+  .single-model { grid-template-columns: 1fr; }
   .data-card, .notes-section { grid-template-columns: 1fr; }
   .source-line { grid-column: 1; }
 }

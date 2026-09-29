@@ -26,7 +26,7 @@
   <main>
     <section class="hero">
       <div class="hero-copy">
-      <p class="eyebrow">RECONSTRUCTION COMPARISON · 2026-09-29</p>
+      <p class="eyebrow">RECONSTRUCTION COMPARISON · 2026-09-30</p>
         <h1>同一份投影資料，<br>把每種方法放在同一列看。</h1>
         <p class="lede">單凸體作基準，重點看雙凸體比較與初始化失敗。紅線只供評估，不是重建輸入。</p>
       </div>
@@ -46,60 +46,58 @@
       <div class="section-head">
         <div>
           <p class="eyebrow">01 · SINGLE CONVEX BODY</p>
-          <h2>單凸體：角度變多時，邊界如何收斂</h2>
+          <h2>單凸體：幾何包絡法的直接版本</h2>
         </div>
-        <p>代表案例：旋轉細長橢圓 <code>slender-r37</code>。端點法是一般凸多邊形版本，沒有使用橢圓擬合。</p>
+        <p>單凸體不需要分離視角。全部量到的弦長都屬於同一個物體，可直接建立內、外包絡。</p>
       </div>
 
-      <div class="matrix-scroll" role="region" aria-label="單凸體方法比較矩陣" tabindex="0">
+      <div class="single-model">
+        <p><strong>模型</strong>　未知物體 <em>D</em> 非空、緊緻、凸且有內部，密度為 1。資料無雜訊；detector 覆蓋完整投影，每個量測方向至少有一筆正值及兩側相鄰外點。</p>
+        <p><strong>重建</strong>　正值投影的外側端點給出 <em>P</em>。若一條量測線與 <em>P</em> 的交段是 [a,b]、實測弦長是 <em>g</em>，則非空時 [b−g,a+g] 必在 <em>D</em> 內。這些線段的凸包是 <em>Q</em>；輸出 <em>R</em>=(<em>Q</em>+<em>P</em>)/2。</p>
+        <p><strong>保證</strong>　若 <em>Q</em> 非空，則 <em>Q</em>⊆<em>D</em>⊆<em>P</em>，且 <em>d</em><sub>H</sub>(<em>D</em>,<em>R</em>)≤½<em>d</em><sub>H</sub>(<em>P</em>,<em>Q</em>)。這裡展示一輪包絡；雙凸體另有交替細化。</p>
+      </div>
+
+      <div class="matrix-scroll" role="region" aria-label="單凸體包絡法與 FBP 比較" tabindex="0">
         <div class="comparison-grid single-grid">
           <div class="corner-label">量測條件</div>
           <div class="column-label"><strong>真值</strong><span>Truth</span></div>
-          <div class="column-label"><strong>FBP 0.5</strong><span>灰階重建</span></div>
-          <div class="column-label"><strong>端點幾何法</strong><span>局部端點擬合</span></div>
-          <div class="column-label"><strong>FBP 疊圖</strong><span class="truth-key">紅：真值</span></div>
-          <div class="column-label"><strong>端點法疊圖</strong><span class="truth-key">紅：真值</span></div>
+          <div class="column-label"><strong>FBP 0.5</strong><span class="truth-key">灰：凸化後輪廓；紅：真值</span></div>
+          <div class="column-label"><strong>幾何包絡法</strong><span>灰：輸出 R；藍：外 P；黃：內 Q；紅：真值</span></div>
 
           <div class="row-label"><strong>4 angles</strong><span>0°–135°</span><em>極少角度</em></div>
-          <figure class="visual-cell"><img src="assets/single_m4_truth.png" alt="四角度單凸體案例的真實橢圓"></figure>
-          <figure class="visual-cell"><img src="assets/single_m4_fbp.png" alt="四角度 FBP 重建"><figcaption>HD 0.134907</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m4_endpoint.png" alt="四角度端點幾何重建"><figcaption>HD 0.142534</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m4_fbp_overlay.png" alt="四角度 FBP 與真值邊界疊圖"><figcaption>星狀角度偽影</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m4_endpoint_overlay.png" alt="四角度端點幾何法與真值邊界疊圖"><figcaption>支撐多邊形偏粗</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_truth.png" alt="四角度單凸體真值"></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_fbp_level.png" alt="四角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.134907</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m4_envelope.png" alt="四角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.070286 · 界 0.074976</figcaption></figure>
 
           <div class="row-label"><strong>8 angles</strong><span>0°–157.5°</span><em>主實驗設定</em></div>
-          <figure class="visual-cell"><img src="assets/single_m8_truth.png" alt="八角度單凸體案例的真實橢圓"></figure>
-          <figure class="visual-cell"><img src="assets/single_m8_fbp.png" alt="八角度 FBP 重建"><figcaption>HD 0.025129</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m8_endpoint.png" alt="八角度端點幾何重建"><figcaption>HD 0.032579</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m8_fbp_overlay.png" alt="八角度 FBP 與真值邊界疊圖"><figcaption>偽影下降</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m8_endpoint_overlay.png" alt="八角度端點幾何法與真值邊界疊圖"><figcaption>邊界開始貼合</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_truth.png" alt="八角度單凸體真值"></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_fbp_level.png" alt="八角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.025129</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_envelope.png" alt="八角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.018117 · 界 0.020569</figcaption></figure>
 
           <div class="row-label"><strong>16 angles</strong><span>0°–168.75°</span><em>較密角度</em></div>
-          <figure class="visual-cell"><img src="assets/single_m16_truth.png" alt="十六角度單凸體案例的真實橢圓"></figure>
-          <figure class="visual-cell"><img src="assets/single_m16_fbp.png" alt="十六角度 FBP 重建"><figcaption>HD 0.005055</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m16_endpoint.png" alt="十六角度端點幾何重建"><figcaption>HD 0.009130</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m16_fbp_overlay.png" alt="十六角度 FBP 與真值邊界疊圖"><figcaption>輪廓接近真值</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m16_endpoint_overlay.png" alt="十六角度端點幾何法與真值邊界疊圖"><figcaption>多邊形誤差縮小</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_truth.png" alt="十六角度單凸體真值"></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_fbp_level.png" alt="十六角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.005055</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m16_envelope.png" alt="十六角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.008921 · 界 0.009267</figcaption></figure>
         </div>
       </div>
 
       <div class="data-card">
         <div class="data-card-copy">
           <p class="eyebrow">ALL 9 SINGLE-BODY PHANTOMS</p>
-          <h3>九個單凸體的中位邊界誤差</h3>
-          <p>代表圖不能代替整體統計。一般端點法在 4、8、16 角度的中位誤差仍高於 FBP；只有額外假設形狀為橢圓的參數模型明顯較低。</p>
+          <h3>九個單凸體的中位 Hausdorff 誤差</h3>
+          <p>外接端點 <em>P</em> 只使用零／正值位置；包絡法還使用每條線的弦長。4、8 角度時包絡中點的中位誤差低於 FBP 0.5；16 角度時略高。九個物體都是橢圓，不能推論所有凸體。</p>
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>角度數</th><th>FBP 0.5</th><th>FBP oracle*</th><th>一般端點法</th><th>橢圓模型*</th></tr></thead>
+            <thead><tr><th>角度數</th><th>FBP 0.5</th><th>外接端點 P</th><th>包絡中點 R</th><th>保證界 ½ dH(P,Q)</th></tr></thead>
             <tbody>
-              <tr><th>4</th><td>0.096696</td><td>0.087422</td><td>0.107314</td><td class="best">0.004744</td></tr>
-              <tr><th>8</th><td>0.025129</td><td>0.022173</td><td>0.032579</td><td class="best">0.002717</td></tr>
-              <tr><th>16</th><td>0.006106</td><td>0.004578</td><td>0.009130</td><td class="best">0.002101</td></tr>
+              <tr><th>4</th><td>0.096696</td><td>0.112633</td><td class="best">0.055557</td><td>0.057502</td></tr>
+              <tr><th>8</th><td>0.025129</td><td>0.038672</td><td class="best">0.018032</td><td>0.020402</td></tr>
+              <tr><th>16</th><td class="best">0.006106</td><td>0.013219</td><td>0.006335</td><td>0.007986</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="footnote">* FBP oracle 用真值選門檻，只作診斷；橢圓模型使用正確形狀族先驗，不能代表一般凸體方法。</p>
+        <p class="footnote">同一批解析 Radon 樣本，Δs=0.01；FBP 使用固定 0.5 門檻、取與中心連通的輪廓再凸化，兩法都使用凸先驗。包絡法不知道橢圓參數；真值只供評估。HD 以 4096 個支撐方向數值評估，浮點包絡界未經區間算術認證。另以 9 個非橢圓凸多邊形設定檢查包含與誤差界。<a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/results/SINGLE_BODY_METHOD.md">方法與證明</a> · <a href="assets/single_envelope_metrics.json">下載完整數值</a>。</p>
       </div>
     </section>
 
