@@ -59,6 +59,45 @@
           </tbody>
         </table>
       </div>
+      <div class="matrix-scroll" role="region" aria-label="四個初始化失敗案例的五欄重建比較" tabindex="0">
+        <div class="comparison-grid separator-grid">
+          <div class="corner-label">案例</div>
+          <div class="column-label"><strong>真值</strong><span>Truth</span></div>
+          <div class="column-label"><strong>FBP 0.5</strong><span>紅：真值</span></div>
+          <div class="column-label"><strong>SIRT 500</strong><span>紅：真值</span></div>
+          <div class="column-label"><strong>TV 1500</strong><span>紅：真值</span></div>
+          <div class="column-label"><strong>分離線搜尋＋包絡</strong><span>紅／藍／黃：真值／外／內</span></div>
+
+          <div class="row-label"><strong>small_gap_2</strong><span>原方法無雙區塊錨點</span></div>
+          <figure class="visual-cell"><img src="../results/assets/separator_small_gap_2_truth.png" alt="small_gap_2 真值" loading="lazy"></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_small_gap_2_fbp.png" alt="small_gap_2 FBP" loading="lazy"><figcaption>HD 1.111301 · 13 碎片</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_small_gap_2_sirt500.png" alt="small_gap_2 SIRT" loading="lazy"><figcaption>4 碎片 · 無法分成兩體</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_small_gap_2_tv1500.png" alt="small_gap_2 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_small_gap_2_geometry.png" alt="small_gap_2 分離線搜尋與包絡" loading="lazy"><figcaption class="pass-result">HD 0.001021 · 界 0.001057</figcaption></figure>
+
+          <div class="row-label"><strong>unresolved_gap_0</strong><span>最低殘差分支切入真體</span><em class="bad">不具認證</em></div>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_0_truth.png" alt="unresolved_gap_0 真值" loading="lazy"></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_0_fbp.png" alt="unresolved_gap_0 FBP" loading="lazy"><figcaption>HD 0.886026 · 15 碎片</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_0_sirt500.png" alt="unresolved_gap_0 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_0_tv1500.png" alt="unresolved_gap_0 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_0_geometry.png" alt="unresolved_gap_0 分離線搜尋與包絡" loading="lazy"><figcaption class="bad-result">HD 0.002924 · 所列界不具認證</figcaption></figure>
+
+          <div class="row-label"><strong>unresolved_gap_1</strong><span>14 個相容候選</span><em>條件式</em></div>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_1_truth.png" alt="unresolved_gap_1 真值" loading="lazy"></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_1_fbp.png" alt="unresolved_gap_1 FBP" loading="lazy"><figcaption>HD 0.884224 · 12 碎片</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_1_sirt500.png" alt="unresolved_gap_1 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_1_tv1500.png" alt="unresolved_gap_1 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_1_geometry.png" alt="unresolved_gap_1 分離線搜尋與包絡" loading="lazy"><figcaption class="conditional-result">HD 0.002378 · 條件式界 0.006241</figcaption></figure>
+
+          <div class="row-label"><strong>unresolved_gap_2</strong><span>19 個相容候選</span><em>條件式</em></div>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_2_truth.png" alt="unresolved_gap_2 真值" loading="lazy"></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_2_fbp.png" alt="unresolved_gap_2 FBP" loading="lazy"><figcaption>HD 0.877390 · 21 碎片</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_2_sirt500.png" alt="unresolved_gap_2 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_2_tv1500.png" alt="unresolved_gap_2 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+          <figure class="visual-cell"><img src="../results/assets/separator_unresolved_gap_2_geometry.png" alt="unresolved_gap_2 分離線搜尋與包絡" loading="lazy"><figcaption class="conditional-result">HD 0.005057 · 條件式界 0.009285</figcaption></figure>
+        </div>
+      </div>
+      <p class="matrix-note">像素法只用總端點外框與固定 0.5 門檻。<code>unresolved_gap_0</code> 的最佳分支切入真體 8.16×10<sup>−5</sup>，所以 0.005688 不能當成誤差認證。<a href="../results/assets/separator_five_column_metrics.json">完整數值</a></p>
     </section>
 
     <section class="finding" aria-labelledby="finding-title">
