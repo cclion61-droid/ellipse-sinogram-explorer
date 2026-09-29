@@ -68,7 +68,7 @@ h1 { max-width: 930px; margin-bottom: 26px; font-family: Georgia, "Noto Serif TC
 
 .matrix-scroll { max-width: 1450px; margin: 0 auto; padding-bottom: 8px; overflow-x: auto; scrollbar-color: var(--teal) transparent; }
 .comparison-grid { display: grid; min-width: 1100px; gap: 5px; }
-.single-grid { min-width: 780px; grid-template-columns: 145px repeat(3, minmax(190px, 1fr)); }
+.single-grid { min-width: 1100px; grid-template-columns: 145px repeat(5, minmax(170px, 1fr)); }
 .double-grid { grid-template-columns: 145px repeat(5, minmax(170px, 1fr)); }
 .corner-label, .column-label, .row-label { display: flex; justify-content: center; flex-direction: column; }
 .corner-label { align-items: flex-start; padding: 12px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
