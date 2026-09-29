@@ -9,7 +9,7 @@
 <body>
   <header class="header">
     <nav class="site-nav" aria-label="L 型研究"><a href="../index.html">← 研究首頁</a><a href="index.html" aria-current="page">L 型初步搜尋</a><a href="optimization.html">切法最佳化 →</a></nav>
-    <div class="title-row"><div><p class="eyebrow">CONCAVE RECONSTRUCTION / EXPERIMENT 01</p><h1>找不到空隙，就試著找切法</h1></div><a href="README.md" class="source-link">實驗規格與限制 ↗</a></div>
+    <div class="title-row"><div><p class="eyebrow">CONCAVE RECONSTRUCTION / EXPERIMENT 01</p><h1>找不到空隙，就試著找切法</h1></div><a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/concave/README.md" class="source-link">實驗規格與限制 ↗</a></div>
     <p class="intro">此頁保留前一版 L 型搜尋，供新舊比較。它曾把資料誤差最低的候選稱為最佳；現在已發現同一 L 型可有多種正確凸分解。<a href="optimization.html">前往重新定義切法、加入理論與跨形狀測試的第四頁 →</a></p>
   </header>
   <main>
@@ -73,7 +73,7 @@
       <div class="table-wrap"><table><thead><tr><th>案例</th><th>舊版資料誤差</th><th>新版資料誤差</th><th>舊版 IoU</th><th>新版 IoU</th></tr></thead><tbody id="beforeAfter"></tbody></table></div>
       <p class="plot-note">資料誤差變小不必然代表形狀更準；IoU 僅在有限網格評估。這四個案例是開發測試，不是獨立測試集。<a href="search-comparison.json">下載新舊比較與單次時間紀錄</a>。</p>
     </section>
-    <footer><p>重建引擎只接收 total、angles、detector。L 型頂點與切割答案留在模擬／評估端；更換真值疊圖不會改變搜尋結果。</p><button id="export">顯示／匯出本次完整 JSON</button><p><a href="README.md">讀實驗記錄</a> · <a href="engine.js">重建程式</a> · <a href="engine.test.cjs">數學操作測試</a></p></footer>
+    <footer><p>重建引擎只接收 total、angles、detector。L 型頂點與切割答案留在模擬／評估端；更換真值疊圖不會改變搜尋結果。</p><button id="export">顯示／匯出本次完整 JSON</button><p><a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/concave/README.md">讀實驗記錄</a> · <a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/concave/engine.js">重建程式</a> · <a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/concave/engine.test.cjs">數學操作測試</a></p></footer>
     <section id="exportPanel" class="plot-panel" hidden><h3>可重現的計算紀錄</h3><a id="download" download="l-shape-experiment.json">下載 JSON</a><textarea id="exportText" rows="7" readonly aria-label="實驗 JSON"></textarea></section>
   </main>
   <noscript>此頁需要 JavaScript。</noscript>
