@@ -111,7 +111,8 @@
     try { return { ...cut, initialOuter, ...solve(data, initialOuter, rounds) }; }
     catch (error) { return { ...cut, initialOuter, status: 'numerical-error', message: error.message }; }
   }
-  function search(data, options = {}, progress = () => {}) {
+  // Retained verbatim for reproducible before/after comparisons; not used by search().
+  function searchLegacy(data, options = {}, progress = () => {}) {
     const config = { extent: 1.8, directions: 12, offsets: 17, rounds: 3, refinementLevels: 3, ...options };
     const global = globalOuter(data, config.extent), summaries = [], leaders = [], seen = new Set();
     let best = null;
@@ -146,5 +147,100 @@
       alternatives: leaders.slice(0, 4).map(c => ({id:c.id, phi:c.phi, offset:c.offset, score:c.score, output:c.output})),
       selection: 'Minimum measured total-sinogram relative L2 residual of midpoint output among numerically compatible candidates. No truth used.' };
   }
-  return { unionLength, forward, residual, globalOuter, ray, audit, grow, solve, normalizeCut, cutCandidate, search };
+  // The grid uses the known field of view, not an angle-count-dependent enclosure.
+  function coarseCuts(extent, directions, offsets) {
+    const cuts = [];
+    for (let a = 0; a < directions; a++) {
+      const phi = a * Math.PI / directions;
+      for (let k = 1; k <= offsets; k++) cuts.push({ phi, offset: extent * (2*k/(offsets+1)-1) });
+    }
+    return cuts;
+  }
+  function search(data, options = {}, progress = () => {}) {
+    const config = { extent: 1.8, directions: 12, offsets: 17, rounds: 3,
+      refinementLevels: 12, beamWidth: 4, seedViews: 8, maxCandidates: 1500, targetResidual: 1e-7, ...options };
+    for (const name of ['directions','offsets','beamWidth','maxCandidates'])
+      if (!Number.isInteger(config[name]) || config[name] < 1) throw Error('Invalid '+name);
+    for (const name of ['rounds','refinementLevels','seedViews'])
+      if (!Number.isInteger(config[name]) || config[name] < 0) throw Error('Invalid '+name);
+    if (!(config.extent > 0 && Number.isFinite(config.extent))) throw Error('Invalid extent');
+    if (!(config.targetResidual >= 0 && Number.isFinite(config.targetResidual))) throw Error('Invalid targetResidual');
+    const global = globalOuter(data, config.extent), summaries = [], pool = [], leaders = [], seen = new Set();
+    const history = [], stages = [];
+    let best = null, seedSearch = null, budgetHit = false;
+    const targetMet = () => !!best && best.score <= config.targetResidual;
+    const tryCut = (phi, offset, phase) => {
+      const cut = normalizeCut(phi, offset), key = cut.phi.toFixed(12)+':'+cut.offset.toFixed(12);
+      if (seen.has(key)) return;
+      if (summaries.length >= config.maxCandidates) { budgetHit = true; return; }
+      seen.add(key);
+      // All accepted outputs and scores always use EVERY supplied measurement.
+      const c = cutCandidate(data, global, cut.phi, cut.offset, config.rounds);
+      c.id = summaries.length; c.phase = phase;
+      const summary = { id:c.id, phi:c.phi, offset:c.offset, phase, status:c.status,
+        score:c.score??null, bound:c.bound??null, violation:c.check?.violation??null };
+      summaries.push(summary); pool.push(summary);
+      if (c.status === 'compatible' && Number.isFinite(c.score)) {
+        leaders.push(c); leaders.sort((a,b)=>a.score-b.score); if (leaders.length>8) leaders.pop();
+        if (!best || c.score < best.score) {
+          best = c; history.push({tried:summaries.length, id:c.id, phase, score:c.score});
+        }
+      }
+      if (summaries.length%12===0) progress({tried:summaries.length,best:best?.score??null,phase});
+    };
+    const stage = name => stages.push({phase:name,tried:summaries.length,
+      compatible:summaries.filter(c=>c.status==='compatible').length,best:best?.score??null});
+    for (const c of coarseCuts(config.extent,config.directions,config.offsets)) tryCut(c.phi,c.offset,'coarse');
+    stage('coarse');
+    // Subsets propose seeds only; they never authorize a full-data reconstruction.
+    if (!targetMet() && !budgetHit && config.seedViews >= 2 && data.angles.length > config.seedViews) {
+      const indices = Array.from({length:config.seedViews},(_,j)=>Math.floor(j*data.angles.length/config.seedViews));
+      const subset = {detector:data.detector,angles:indices.map(j=>data.angles[j]),total:indices.map(j=>data.total[j])};
+      const seedResult = search(subset,{...config,seedViews:0},p=>progress({
+        tried:summaries.length,best:best?.score??null,phase:'subset-seeds',seedTried:p.tried}));
+      seedSearch = {indices,tried:seedResult.candidates.length,counts:seedResult.counts,
+        best:seedResult.best?{phi:seedResult.best.phi,offset:seedResult.best.offset,score:seedResult.best.score}:null,
+        role:'Seeds only. Every transferred cut is independently checked and scored on all measurements.'};
+      // Include improving intermediate cuts, not just the last subset optimum.
+      const transferred = new Set([...seedResult.history.map(h=>h.id),...seedResult.alternatives.map(c=>c.id)]);
+      for (const id of transferred) {
+        const c = seedResult.candidates[id]; tryCut(c.phi,c.offset,'subset-recheck');
+      }
+      stage('subset-recheck');
+    }
+    function diverse(candidates,count,da,ds) {
+      const chosen=[];
+      for (const c of candidates) {
+        if (chosen.every(p=>{
+          const difference=Math.abs(c.phi-p.phi),wrap=difference>Math.PI/2;
+          return Math.hypot(Math.min(difference,Math.PI-difference)/da,
+            (wrap?c.offset+p.offset:c.offset-p.offset)/ds)>=1.5;
+        })) chosen.push(c);
+        if (chosen.length===count) break;
+      }
+      return chosen;
+    }
+    for (let level=0; level<config.refinementLevels && !budgetHit && !targetMet(); level++) {
+      const da=Math.PI/config.directions/2**(level+1), ds=2*config.extent/(config.offsets+1)/2**(level+1);
+      const feasible=pool.filter(c=>c.status==='compatible').sort((a,b)=>a.score-b.score);
+      const near=pool.filter(c=>c.status==='contradiction' && Number.isFinite(c.violation)).sort((a,b)=>a.violation-b.violation);
+      const unresolved=pool.filter(c=>c.status==='unresolved');
+      // Do not terminate just because the coarse grid has no feasible candidate.
+      // Violation is a heuristic priority, NOT a lower bound on a parameter box.
+      const seeds=[...diverse(feasible,config.beamWidth,da,ds),
+        ...diverse(near,config.beamWidth,da,ds),...diverse(unresolved,2,da,ds)];
+      if (!seeds.length) break;
+      for (const c of seeds) for (const ia of [-1,0,1]) for (const is of [-1,0,1])
+        tryCut(c.phi+ia*da,c.offset+is*ds,'refine-'+(level+1));
+      stage('refine-'+(level+1));
+    }
+    const counts={}; summaries.forEach(c=>{counts[c.status]=(counts[c.status]||0)+1;});
+    progress({tried:summaries.length,best:best?.score??null,phase:'complete'});
+    return {version:2,status:best?'candidate-found':'no-candidate',config,global,candidates:summaries,
+      counts,best,history,stages,seedSearch,termination:targetMet()?'residual-target':budgetHit?'candidate-budget':'resolution-limit',
+      totalEvaluations:summaries.length+(seedSearch?.tried||0),
+      alternatives:leaders.slice(0,4).map(c=>({id:c.id,phi:c.phi,offset:c.offset,score:c.score,output:c.output})),
+      selection:'Smallest full-data relative L2 residual among evaluated, numerically compatible midpoint outputs. No truth used. Heuristic search, not a global optimum or convexity certificate.'};
+  }
+  return { unionLength, forward, residual, globalOuter, ray, audit, grow, solve, normalizeCut, cutCandidate, coarseCuts, searchLegacy, search };
 });

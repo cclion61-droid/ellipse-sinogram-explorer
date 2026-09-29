@@ -14,12 +14,12 @@
   </header>
   <main>
     <section class="setup" aria-label="實驗設定">
-      <label>案例 <select id="case"><option value="8-0">L 型 · 8 角度</option><option value="4-0">L 型 · 4 角度</option><option value="8-22.5">旋轉 22.5° · 8 角度</option><option value="16-0">L 型 · 16 角度：搜尋失敗</option></select></label>
+      <label>案例 <select id="case"><option value="8-0">L 型 · 8 角度</option><option value="4-0">L 型 · 4 角度</option><option value="8-22.5">旋轉 22.5° · 8 角度</option><option value="16-0">L 型 · 16 角度（新版）</option></select></label>
       <button id="run" class="primary">重新搜尋切線</button>
       <label class="check"><input id="truth" type="checkbox" checked> 疊加真值（只供評估）</label>
     </section>
     <p id="status" class="run-status" role="status">讀取已執行的實驗…</p>
-    <p class="plot-note">以下摘要固定顯示全域搜尋的最佳候選；下方可另外檢視各切法。</p>
+    <p class="plot-note">以下摘要顯示「已評估候選」中，全部量測資料擬合最好的切法；不代表全域最優。</p>
     <section class="metrics" aria-label="最佳候選摘要">
       <article><span>總資料擬合誤差</span><strong id="residual">—</strong><small>相對 L₂；越低越好</small></article>
       <article><span>形狀 IoU</span><strong id="iou">—</strong><small>257 × 257 網格；只供評估</small></article>
@@ -57,13 +57,21 @@
         <h3>這次真正驗證了什麼？</h3>
         <div class="table-wrap"><table><tbody id="checks"></tbody></table></div>
         <p class="plot-note">「資料相容」只是未發現矛盾。選出的切線不一定讓真實兩片凸，因此內外距離半值不能自動當成已成立的誤差保證。</p>
-        <details><summary>為什麼 16 角度反而搜尋失敗？</summary><p>固定粗網格的候選切線可能錯過正確切法；增加量測後，不精確的候選更容易被排除。本版只在已有相容候選附近細化，因此可能停在「無候選」。這是搜尋的限制，不代表更多資料使問題更難。另以已知正確切線作診斷可以通過，但該診斷不列入未知切線成果。</p></details>
+        <details><summary>新版怎麼修正「粗搜尋全失敗就停住」？</summary><p>先用不隨量測角度數改變的粗網格，再同時細化「資料擬合較好」與「矛盾較小」的切法。即使粗網格完全沒有相容候選，也繼續縮小步幅尋找。超过 8 角度且尚未達到擬合目標時，另用資料子集提出起點，但每個起點必須在全部資料重新檢查。</p><p>矛盾量只引導探索，沒有用來排除整片參數區域；這不是具有全域最優保證的分枝定界法。未旋轉 L 型的新網格恰好含有正確水平切線；旋轉案例用來檢查真正需要細化的情況。</p></details>
       </section>
     </div>
     <section class="plot-panel results-panel">
       <h3>相同設定下的四個實測案例</h3>
       <div class="table-wrap"><table><thead><tr><th>案例</th><th>資料誤差</th><th>IoU</th><th>搜尋結果</th><th>真體凸分解</th></tr></thead><tbody id="comparison"></tbody></table></div>
-      <p class="plot-note">無雜訊、Δs = 0.04、91 個 detector；12 個切線法向量方向 × 17 個位置，最多 3 層局部細化，每個候選更新 3 輪。這是先導實驗，沒有 FBP／SIRT／TV 對照，也未證明速度優勢。</p>
+      <p class="plot-note">無雜訊、Δs = 0.04、91 個 detector；12 × 17 個固定粗候選，最多 12 層多起點細化，每次步幅減半，每候選更新 3 輪。資料相對誤差 ≤ 10⁻⁷ 可提早停止；每次搜尋最多 1,500 個候選（子集搜尋另計）。沒有 FBP／SIRT／TV 對照，未證明速度優勢。</p>
+    </section>
+    <section class="plot-panel results-panel">
+      <h3>搜尋是如何改善的？</h3>
+      <p id="searchSummary" class="plot-note"></p>
+      <div class="table-wrap"><table><thead><tr><th>階段</th><th>全資料候選累計</th><th>相容候選累計</th><th>目前最佳資料誤差</th></tr></thead><tbody id="searchStages"></tbody></table></div>
+      <h3>相同資料：舊版與新版</h3>
+      <div class="table-wrap"><table><thead><tr><th>案例</th><th>舊版資料誤差</th><th>新版資料誤差</th><th>舊版 IoU</th><th>新版 IoU</th></tr></thead><tbody id="beforeAfter"></tbody></table></div>
+      <p class="plot-note">資料誤差變小不必然代表形狀更準；IoU 僅在有限網格評估。這四個案例是開發測試，不是獨立測試集。<a href="search-comparison.json">下載新舊比較與單次時間紀錄</a>。</p>
     </section>
     <footer><p>重建引擎只接收 total、angles、detector。L 型頂點與切割答案留在模擬／評估端；更換真值疊圖不會改變搜尋結果。</p><button id="export">顯示／匯出本次完整 JSON</button><p><a href="README.md">讀實驗記錄</a> · <a href="engine.js">重建程式</a> · <a href="engine.test.cjs">數學操作測試</a></p></footer>
     <section id="exportPanel" class="plot-panel" hidden><h3>可重現的計算紀錄</h3><a id="download" download="l-shape-experiment.json">下載 JSON</a><textarea id="exportText" rows="7" readonly aria-label="實驗 JSON"></textarea></section>

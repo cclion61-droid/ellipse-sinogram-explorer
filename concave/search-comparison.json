@@ -1,0 +1,140 @@
+{
+  "date": "2026-09-29",
+  "engineSha256": "458e0aee057f5da4649a787d575da61df461b7bd579a0833656645cf829beef1",
+  "warning": "Development cases, not a held-out benchmark. Single-run timings are descriptive, not a speed claim. Both methods receive identical total data; true cuts never enter search.",
+  "cases": [
+    {
+      "views": 4,
+      "rotation": 0,
+      "legacy": {
+        "status": "candidate-found",
+        "candidates": 282,
+        "totalEvaluations": 282,
+        "elapsedSeconds": 4.1355453,
+        "residual": 0.01042244887959711,
+        "gridIoU": 0.972504892367906,
+        "sampledBoundaryDistance": 0.01415996261657112,
+        "trueCutConvexityDefectArea": [
+          1.1102230246251565e-16,
+          0.00417339437023001
+        ],
+        "outerContainmentViolation": 0,
+        "trueCutConvexityPass": false
+      },
+      "adaptive": {
+        "status": "candidate-found",
+        "candidates": 884,
+        "totalEvaluations": 884,
+        "elapsedSeconds": 34.0512414,
+        "residual": 0.0019220702136632704,
+        "gridIoU": 0.9996019108280255,
+        "sampledBoundaryDistance": 0.009387113031581603,
+        "trueCutConvexityDefectArea": [
+          0,
+          0
+        ],
+        "outerContainmentViolation": 0,
+        "trueCutConvexityPass": true
+      }
+    },
+    {
+      "views": 8,
+      "rotation": 0,
+      "legacy": {
+        "status": "candidate-found",
+        "candidates": 246,
+        "totalEvaluations": 246,
+        "elapsedSeconds": 4.857768900000001,
+        "residual": 0.002030951542431627,
+        "gridIoU": 0.9995023885350318,
+        "sampledBoundaryDistance": 0.006265866810482521,
+        "trueCutConvexityDefectArea": [
+          0.0018830598839973955,
+          0
+        ],
+        "outerContainmentViolation": 0.0012446380803494013,
+        "trueCutConvexityPass": false
+      },
+      "adaptive": {
+        "status": "candidate-found",
+        "candidates": 204,
+        "totalEvaluations": 204,
+        "elapsedSeconds": 1.2466998999999999,
+        "residual": 2.640436349900924e-8,
+        "gridIoU": 0.9999004777070064,
+        "sampledBoundaryDistance": 0.005985784453114692,
+        "trueCutConvexityDefectArea": [
+          0,
+          0
+        ],
+        "outerContainmentViolation": 0,
+        "trueCutConvexityPass": true
+      }
+    },
+    {
+      "views": 8,
+      "rotation": 22.5,
+      "legacy": {
+        "status": "candidate-found",
+        "candidates": 246,
+        "totalEvaluations": 246,
+        "elapsedSeconds": 5.491771699999999,
+        "residual": 0.001896343023206865,
+        "gridIoU": 0.9968114786767637,
+        "sampledBoundaryDistance": 0.008916898354312633,
+        "trueCutConvexityDefectArea": [
+          0.0017161009959965057,
+          0
+        ],
+        "outerContainmentViolation": 0.0018069191761113715,
+        "trueCutConvexityPass": false
+      },
+      "adaptive": {
+        "status": "candidate-found",
+        "candidates": 827,
+        "totalEvaluations": 827,
+        "elapsedSeconds": 72.0691727,
+        "residual": 0.001710108665609472,
+        "gridIoU": 0.9975087194818136,
+        "sampledBoundaryDistance": 0.008475581011900296,
+        "trueCutConvexityDefectArea": [
+          0,
+          0.008769914595513018
+        ],
+        "outerContainmentViolation": 0.011500084756970359,
+        "trueCutConvexityPass": false
+      }
+    },
+    {
+      "views": 16,
+      "rotation": 0,
+      "legacy": {
+        "status": "no-candidate",
+        "candidates": 204,
+        "totalEvaluations": 204,
+        "elapsedSeconds": 4.474637600000002,
+        "residual": null,
+        "gridIoU": null,
+        "sampledBoundaryDistance": null,
+        "trueCutConvexityDefectArea": null,
+        "outerContainmentViolation": null,
+        "trueCutConvexityPass": null
+      },
+      "adaptive": {
+        "status": "candidate-found",
+        "candidates": 204,
+        "totalEvaluations": 204,
+        "elapsedSeconds": 2.3122578,
+        "residual": 1.4907785166317296e-8,
+        "gridIoU": 1,
+        "sampledBoundaryDistance": 0.00297009300850763,
+        "trueCutConvexityDefectArea": [
+          0,
+          0
+        ],
+        "outerContainmentViolation": 0,
+        "trueCutConvexityPass": true
+      }
+    }
+  ]
+}

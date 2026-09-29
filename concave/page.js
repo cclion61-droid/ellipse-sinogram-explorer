@@ -17,7 +17,8 @@
   }
   function text(parent,x,y,value,attrs={}){const e=svg('text',{x,y,...attrs},parent);e.textContent=value;return e;}
   const format=x=>Number.isFinite(x)?x.toFixed(5):'—';
-  const percent=x=>Number.isFinite(x)?(100*x).toFixed(3)+'%':'—';
+  const percent=x=>Number.isFinite(x)?(x>0&&x<1e-5?(100*x).toExponential(2):(100*x).toFixed(4))+'%':'—';
+  const phaseName=p=>p==='coarse'?'固定粗網格':p==='subset-recheck'?'子集起點：全資料重驗':p==='subset-seeds'?'子集搜尋':p==='complete'?'完成':p.replace('refine-','細化第 ')+' 層';
   function drawObjects(){
     const el=$('objects');el.replaceChildren();
     const px=p=>[250+p[0]*105,224-p[1]*105];
@@ -81,10 +82,13 @@
     if(!artifact)return;
     const r=artifact.result,e=artifact.evaluation;
     $('residual').textContent=percent(r.best?.score);$('iou').textContent=percent(e?.gridIoU);
-    $('count').textContent=r.candidates.length;$('countNote').textContent=(r.counts.compatible||0)+' 個未發現矛盾';
+    $('count').textContent=r.candidates.length;$('countNote').textContent=(r.counts.compatible||0)+' 個未發現矛盾'+(r.seedSearch?'；子集另測 '+r.seedSearch.tried+' 次':'');
     $('convexity').textContent=e?(e.trueCutConvexityPass?'通過':'未通過'):'未重建';
     $('convexity').className=e?.trueCutConvexityPass?'good':'bad';
-    $('finding').textContent=r.best?(e.trueCutConvexityPass?'此例找到可用候選。下列精度與凸性檢查由真值事後評估；浮點計算尚非嚴格機器認證。':'此例能得到接近 L 型的重建；但選中切法的真實凸分解檢查未通過，不能套用原先的條件性誤差保證。請同時看精度與這項限制。'):'固定搜尋網格找不到通過檢查的候選。這是本次搜尋失敗；不等於資料無法重建，也不會補入真實切線當答案。';
+    $('finding').textContent=r.best?(e?.trueCutConvexityPass?'此例找到可用候選。下列精度與凸性檢查由真值事後評估；浮點計算尚非嚴格機器認證。':'此例能得到接近 L 型的重建；但選中切法的真實凸分解檢查未通過，不能套用原先的條件性誤差保證。請同時看精度與這項限制。'):'本次搜尋預算內找不到通過檢查的候選。這不等於資料無法重建，也不會補入真實切線當答案。';
+    const reason={'residual-target':'已達資料誤差目標','candidate-budget':'已達候選預算','resolution-limit':'已完成可用的細化層數'};
+    $('searchSummary').textContent=(reason[r.termination]||'舊版紀錄')+'。全資料評估 '+r.candidates.length+' 次'+(r.seedSearch?'；子集另評估 '+r.seedSearch.tried+' 次，子集分數不參與最終排名':'')+'。保留歷來最佳答案，不因後續候選變差而退步。';
+    $('searchStages').replaceChildren(...(r.stages||[]).map(s=>{const tr=document.createElement('tr');for(const v of [phaseName(s.phase),s.tried,s.compatible,percent(s.best)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}return tr;}));
     document.querySelectorAll('#steps button').forEach((b,i)=>b.setAttribute('aria-current',i===step?'step':'false'));
     $('stepTitle').textContent=lessons[step][1];$('explanation').textContent=lessons[step][2];$('formula').textContent=lessons[step][3];
     $('previous').disabled=step===0;$('next').disabled=step===4;
@@ -124,7 +128,7 @@
     try{worker=new Worker('worker.js');}catch(error){$('status').textContent='背景計算無法啟動，請使用網站或本機伺服器開啟。';$('run').disabled=false;return;}
     worker.onmessage=event=>{
       const m=event.data;
-      if(m.type==='progress')$('status').textContent='已測 '+m.progress.tried+' 個切法；最佳資料誤差 '+percent(m.progress.best);
+      if(m.type==='progress')$('status').textContent=phaseName(m.progress.phase)+'：全資料已測 '+m.progress.tried+' 個切法'+(m.progress.seedTried?'，子集另測 '+m.progress.seedTried+' 個':'')+'；最佳全資料誤差 '+percent(m.progress.best);
       if(m.type==='error'){$('status').textContent='計算失敗：'+m.message;$('run').disabled=false;stopWorker();}
       if(m.type==='result'){
         const a={protocol:{views,rotationDegrees:rotation,spacing:.04,noise:0,elapsedSeconds:m.elapsedSeconds,truthAccess:'Only simulator and evaluation.'},data,truth,result:m.result,evaluation:P.evaluate(truth,m.result)};
@@ -155,5 +159,9 @@
       values.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td);});
     }).catch(()=>{const td=document.createElement('td');td.colSpan=5;td.textContent=key+'：紀錄無法讀取';tr.append(td);});
   }
+  fetch('search-comparison.json').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json();}).then(report=>{
+    $('beforeAfter').replaceChildren(...report.cases.map(c=>{const tr=document.createElement('tr');
+      for(const v of [(c.rotation?'旋轉 '+c.rotation+'°／':'L／')+c.views+' 角度',percent(c.legacy.residual),percent(c.adaptive.residual),percent(c.legacy.gridIoU),percent(c.adaptive.gridIoU)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}return tr;}));
+  }).catch(()=>{$('beforeAfter').textContent='新舊比較紀錄尚未載入。';});
   loadCase();
 })();

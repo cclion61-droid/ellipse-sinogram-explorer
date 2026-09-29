@@ -33,7 +33,7 @@ test('detector ray coincident with a proposed cut is explicitly skipped',()=>{
   const data=P.makeData(P.shape(),8);
   assert.equal(C.cutCandidate(data,C.globalOuter(data,1.8),0,data.detector[45],3).status,'boundary-ray');
 });
-test('unknown-cut search uses measurement-only input and exposes its gap',()=>{
+test('unknown-cut search uses measurement-only input and minimizes evaluated full-data residual',()=>{
   const data=P.makeData(P.shape(),8),before=JSON.stringify(data);
   assert.deepEqual(Object.keys(data).sort(),['angles','detector','total']);
   const result=C.search(data);
@@ -42,6 +42,39 @@ test('unknown-cut search uses measurement-only input and exposes its gap',()=>{
   assert.equal(result.best.score,Math.min(...compatible.map(c=>c.score)));
   assert.ok(result.best.score<.01);
   const evaluation=P.evaluate(P.shape(),result);
-  assert.equal(evaluation.trueCutConvexityPass,false);
-  assert.ok(evaluation.outerContainmentViolation>1e-5);
+  assert.ok(Number.isFinite(evaluation.outerContainmentViolation));
+  assert.equal(result.best.score,C.residual(result.best.output,data).relative);
+  result.history.forEach((h,i)=>{if(i)assert.ok(h.score<result.history[i-1].score);});
+});
+test('fixed coarse cut grid does not depend on the measured angle count',()=>{
+  const options={refinementLevels:0,seedViews:0};
+  const a=C.search(P.makeData(P.shape(),8),options),b=C.search(P.makeData(P.shape(),16),options);
+  assert.deepEqual(a.candidates.map(c=>[c.phi,c.offset]),b.candidates.map(c=>[c.phi,c.offset]));
+  assert.equal(b.status,'candidate-found');assert.ok(b.best.score<1e-6);
+});
+test('candidate budgets are enforced and invalid settings rejected',()=>{
+  const data=P.makeData(P.shape(),4);
+  const result=C.search(data,{maxCandidates:7});
+  assert.equal(result.candidates.length,7);assert.equal(result.termination,'candidate-budget');
+  assert.throws(()=>C.search(data,{directions:0}),/Invalid directions/);
+});
+test('refinement continues after an entirely infeasible coarse grid',()=>{
+  const data=P.makeData(P.shape(Math.PI/8),8);
+  const result=C.search(data,{refinementLevels:3,seedViews:0});
+  assert.equal(result.stages[0].compatible,0);
+  assert.equal(result.status,'candidate-found');
+  assert.ok(result.candidates.some(c=>c.phase.startsWith('refine-')&&c.status==='compatible'));
+});
+test('subset proposals are rechecked and scored on all measurements',()=>{
+  const data=P.makeData(P.shape(Math.PI/8),8);
+  const result=C.search(data,{refinementLevels:3,seedViews:4});
+  assert.deepEqual(result.seedSearch.indices,[0,2,4,6]);
+  const proposals=result.candidates.filter(c=>c.phase==='subset-recheck');
+  assert.ok(proposals.length>0);
+  for(const c of proposals){
+    const checked=C.cutCandidate(data,result.global,c.phi,c.offset,result.config.rounds);
+    assert.equal(checked.status,c.status);
+    if(c.status==='compatible')assert.equal(checked.score,c.score);
+  }
+  assert.equal(result.totalEvaluations,result.candidates.length+result.seedSearch.tried);
 });
