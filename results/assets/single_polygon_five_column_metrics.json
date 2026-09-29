@@ -1,0 +1,78 @@
+[
+  {
+    "shape": "triangle",
+    "views": 8,
+    "detector_spacing": 0.01,
+    "data": "exact polygon Radon samples; same total sinogram for all methods",
+    "pixel_prior": "endpoint outer polygon",
+    "range_constraint": [
+      0,
+      1
+    ],
+    "threshold": 0.5,
+    "mandatory_segments": 1106,
+    "fbp_0_5_hd": 0.10107623978957671,
+    "fbp_seconds": 0.010214399997494183,
+    "sirt500_hd": 0.02312499999999995,
+    "sirt500_seconds": 6.62350719999813,
+    "tv1500_hd": 0.03537742924521231,
+    "tv1500_seconds": 7.990105600008974,
+    "tv_history": [
+      {
+        "iterations": 500,
+        "objective": 0.6084575263691075,
+        "relative_update": 0.00016387755758556031
+      },
+      {
+        "iterations": 1000,
+        "objective": 0.5357545552860151,
+        "relative_update": 6.781803671060432e-05
+      },
+      {
+        "iterations": 1500,
+        "objective": 0.5184000021910339,
+        "relative_update": 3.942837442821627e-05
+      }
+    ],
+    "envelope_midpoint_hd": 0.07899837973634995,
+    "envelope_bound": 0.07996164107506579
+  },
+  {
+    "shape": "irregular_hexagon",
+    "views": 8,
+    "detector_spacing": 0.01,
+    "data": "exact polygon Radon samples; same total sinogram for all methods",
+    "pixel_prior": "endpoint outer polygon",
+    "range_constraint": [
+      0,
+      1
+    ],
+    "threshold": 0.5,
+    "mandatory_segments": 1251,
+    "fbp_0_5_hd": 0.03499021947934564,
+    "fbp_seconds": 0.013056700001470745,
+    "sirt500_hd": 0.013695916362186268,
+    "sirt500_seconds": 7.691102199998568,
+    "tv1500_hd": 0.021213203435596444,
+    "tv1500_seconds": 8.612282500005676,
+    "tv_history": [
+      {
+        "iterations": 500,
+        "objective": 0.6460153755077848,
+        "relative_update": 0.00011161084091846944
+      },
+      {
+        "iterations": 1000,
+        "objective": 0.5849192447452701,
+        "relative_update": 4.741724070201656e-05
+      },
+      {
+        "iterations": 1500,
+        "objective": 0.5695135179491603,
+        "relative_update": 2.8220638604316896e-05
+      }
+    ],
+    "envelope_midpoint_hd": 0.06614912066582189,
+    "envelope_bound": 0.06629651292756351
+  }
+]
