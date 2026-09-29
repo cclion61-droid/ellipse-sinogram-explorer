@@ -21,5 +21,6 @@ jobs:
           node --check tutorial/tutorial.js
           node --check concave/page.js
           node --check concave/worker.js
+          node --check concave/optimization-page.js
       - name: Check enclosure and chord geometry
-        run: node --test tutorial/geometry.test.cjs concave/engine.test.cjs
+        run: node --test tutorial/geometry.test.cjs concave/engine.test.cjs concave/optimization.test.cjs concave/cut-box.test.cjs

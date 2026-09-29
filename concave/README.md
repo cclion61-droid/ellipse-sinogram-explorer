@@ -1,5 +1,7 @@
 # L-shaped reconstruction: adaptive unknown-cut search
 
+> 更新：第四頁 [切線最佳化與六形狀測試](optimization.html) 已重新定義「最佳切法」。以下保留的是第三頁舊自適應搜尋的紀錄；兩者不能混為同一演算法。完整定義與數值限制見 [研究筆記](OPTIMIZATION_NOTE.md)。
+
 第三頁從**單一總 sinogram** 尋找切線，再重建兩個候選凸片。不提供真實切線、個別 sinogram 或 L 型頂點給搜尋器。新版修正「粗網格全部失敗就停止」；最佳指**已評估候選中，全資料相對 L₂ 誤差最小**，不是全域最優。
 
 ## 已執行結果：2026-09-29

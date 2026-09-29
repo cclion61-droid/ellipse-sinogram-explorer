@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>切法的定義與最佳化・Radon 幾何重建</title><link rel="icon" href="data:,">
+<link rel="stylesheet" href="../tutorial/tutorial.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="optimization.css"></head>
+<body>
+<header class="header"><nav class="site-nav" aria-label="研究頁面"><a href="../index.html">01 橢圓實驗室</a><a href="../tutorial/index.html">02 雙凸體教學</a><a href="index.html">03 L 型初步搜尋</a><a href="optimization.html" aria-current="page">04 切法最佳化</a></nav>
+<div class="title-row"><div><p class="eyebrow">CUT OPTIMIZATION / MODEL AUDIT</p><h1>先定義「最佳切法」，再談搜尋</h1></div><a href="OPTIMIZATION_NOTE.md" class="source-link">定理、證明與限制 ↗</a></div>
+<p class="intro">一個 L 型可沿凹角垂直或水平切成兩個凸片。兩種分法的整體形狀完全相同，因此總 Radon 資料不可能告訴我們「原先是哪一刀」。本頁選擇一個明確的規則，再檢驗它在其他形狀上會怎樣。</p></header>
+<main>
+<section class="logic-grid" aria-label="最佳化的三個定義"><article><span>01 為何需要規則</span><strong>切線不一定可辨識</strong><p>L 型垂直與水平切法的總 sinogram 完全相同，不能把任何一條稱為資料推出的「真切線」。</p></article>
+<article><span>02 選擇規則</span><strong>資料先符合，再選短切口</strong><p>在資料誤差距離最佳值不超過 0.01 個百分點的候選中，選兩片重建輪廓的周長和最小者。精確切割同一圖形時，這等於選最短內部切口。</p></article>
+<article><span>03 能保證什麼</span><strong>固定網格內的最小值</strong><p>24 個方向 × 65 個位置，共 1,560 條切線全部評估；選出的解對這個有限集合最優。連續平面中的最佳切線尚未有保證。</p></article></section>
+<div class="formula">先計算每條切線的資料誤差 E 和兩片周長和 P；令 E<sub>min</sub> 為網格上最小誤差，再取 <span>arg min P，條件是 E ≤ E<sub>min</sub> + 0.0001</span>。</div>
+<section class="setup"><label>測試形狀 <select id="case" aria-label="測試形狀"></select></label><button id="run" class="primary">用總資料重新枚舉</button><label class="check"><input id="truth" type="checkbox" checked>疊加真值（評估用）</label></section>
+<p id="status" class="run-status" role="status">讀取六個已完成的實驗…</p>
+<section class="metrics" aria-label="選中候選的事後評估"><article><span>搜尋結果</span><strong id="outcome">—</strong><small>格點內檢查</small></article><article><span>總資料誤差</span><strong id="error">—</strong><small>相對 L₂</small></article><article><span>形狀 IoU</span><strong id="iou">—</strong><small>257 × 257 網格；評估用</small></article><article><span>切後真體是否凸？</span><strong id="convexity">—</strong><small>只在事後使用真值</small></article></section>
+<p id="finding" class="finding" role="status"></p>
+<section class="figures"><div class="plot-panel"><div class="panel-title"><h2>重建、真值與候選切線</h2><span id="cutLabel"></span></div><svg id="shapePlot" viewBox="0 0 500 440" role="img" aria-label="所選切線、凸片重建與真值圖形"></svg><div class="legend"><span><i class="key truth-key"></i>真值（虛線）</span><span><i class="key" style="border-color:#e2773c"></i>候選切線</span><span><i class="key" style="border-color:#207c96"></i>第一片</span><span><i class="key" style="border-color:#8150a1"></i>第二片</span></div><p id="shapeNote" class="plot-note"></p></div>
+<div class="plot-panel"><div class="panel-title"><h2>輸入只有這一張總 sinogram</h2><span id="matrixSize"></span></div><svg id="sinogram" viewBox="0 0 440 270" role="img" aria-label="測得的總 Radon 資料"></svg><p class="plot-note">搜尋器只接收角度、detector 位置和總弦長；真值形狀只用來產生資料與最後驗證。</p><h3 class="analysis-heading">網格搜尋與參數盒檢查</h3><div class="table-wrap"><table><tbody id="record"></tbody></table></div></div></section>
+<section class="plot-panel results-panel"><h2>換形狀測試，包含失敗例</h2><div class="table-wrap"><table><thead><tr><th>形狀</th><th>本法資料誤差</th><th>本法 IoU</th><th>真體凸性</th><th>上一版資料誤差</th></tr></thead><tbody id="comparison"></tbody></table></div><p class="plot-note">每例都是 8 角度、91 detector、無雜訊；同一固定切線網格、同一誤差容許量。平移與 17° 旋轉刻意讓真切線不落在格點。U 型需要超過兩片；「無候選」只代表本網格搜尋結果。</p></section>
+<section class="plot-panel results-panel"><h2>整塊切線範圍能排除嗎？</h2><p>對每一小塊「角度 × 位置」範圍，先建立可包住該範圍所有切法的較大外框。即使放寬外框，若必須存在的弦長仍大於總量測，就可排除整塊範圍。六例各檢查 1,536 塊；平移 T 還有 20 塊不能排除，U 型全部被排除。</p><p class="plot-note">這個排除判準在精確幾何運算下有證明；目前的浮點計算仍缺嚴格區間算術認證。「不能排除」也不等於已找到可行切法。<a href="box-results.json">看各案例的盒檢查紀錄</a>。</p></section>
+<section class="plot-panel results-panel"><h2>這個方法現在的邊界</h2><p>格點對齊的 L、T 可以得到與真體相容的切法；格點外的案例暴露了搜尋與真實凸性驗證的缺口。切法的數值相容、低資料誤差與高 IoU 都不能單獨證明真實兩片凸。還需要把未排除的參數盒繼續縮小，並建立可靠的連續搜尋上界。</p><p class="plot-note">最短切口對已知多邊形是既有研究問題；本頁只把它當成清楚的選擇規則。<a href="OPTIMIZATION_NOTE.md">讀完整定義與證明</a> · <a href="optimization.js">看最佳化程式</a> · <a href="optimization-results.json">下載六例紀錄</a></p></section>
+<footer><p>這是開發案例，不是獨立測試集，也未證明連續問題最優、任意凹形可重建或相對 FBP 的優勢。</p></footer>
+</main><noscript>此頁需要 JavaScript。</noscript><script src="../tutorial/geometry.js"></script><script src="engine.js"></script><script src="phantom.js"></script><script src="optimization.js"></script><script src="optimization-page.js"></script></body></html>

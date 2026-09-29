@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "note": "Prior adaptive cut search on the same six noiseless total sinograms; not a held-out test.",
+  "cases": [
+    {
+      "id": "L",
+      "seconds": 1.5485489,
+      "totalEvaluations": 204,
+      "status": "candidate-found",
+      "cut": {
+        "phi": 1.5707963267948966,
+        "offset": -0.2000000000000001
+      },
+      "residual": 2.640436349900924e-8,
+      "gridIoU": 0.9999004777070064,
+      "trueCutConvexityPass": true,
+      "outerContainmentViolation": 0
+    },
+    {
+      "id": "L-shift",
+      "seconds": 66.5100683,
+      "totalEvaluations": 860,
+      "status": "candidate-found",
+      "cut": {
+        "phi": 3.0173402097710564,
+        "offset": 0.20507812500000008
+      },
+      "residual": 0.0004284857033475474,
+      "gridIoU": 1,
+      "trueCutConvexityPass": false,
+      "outerContainmentViolation": 0.0027825970187822114
+    },
+    {
+      "id": "L-rotate17",
+      "seconds": 69.851838,
+      "totalEvaluations": 868,
+      "status": "candidate-found",
+      "cut": {
+        "phi": 2.609493067791961,
+        "offset": 0.0825683593750001
+      },
+      "residual": 0.0002817003117021008,
+      "gridIoU": 0.999700449326011,
+      "trueCutConvexityPass": false,
+      "outerContainmentViolation": 0.009603135969343535
+    },
+    {
+      "id": "T",
+      "seconds": 1.6427102000000013,
+      "totalEvaluations": 234,
+      "status": "candidate-found",
+      "cut": {
+        "phi": 1.5707963267948966,
+        "offset": 0.3000000000000001
+      },
+      "residual": 3.6343210755271106e-8,
+      "gridIoU": 0.9997253501785224,
+      "trueCutConvexityPass": true,
+      "outerContainmentViolation": 0
+    },
+    {
+      "id": "T-shift",
+      "seconds": 4.249243600000016,
+      "totalEvaluations": 556,
+      "status": "no-candidate",
+      "cut": null,
+      "residual": null,
+      "gridIoU": null,
+      "trueCutConvexityPass": null,
+      "outerContainmentViolation": null
+    },
+    {
+      "id": "U",
+      "seconds": 4.397895599999989,
+      "totalEvaluations": 521,
+      "status": "no-candidate",
+      "cut": null,
+      "residual": null,
+      "gridIoU": null,
+      "trueCutConvexityPass": null,
+      "outerContainmentViolation": null
+    }
+  ]
+}
