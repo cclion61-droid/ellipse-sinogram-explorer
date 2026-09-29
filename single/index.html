@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="從有限離散 Radon 資料逐步建立單一凸體的內外幾何包絡與 Hausdorff 誤差界。">
+  <title>單凸體幾何包絡重建・逐步解釋</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="single.css">
+</head>
+<body>
+  <header class="header">
+    <nav><a href="../index.html">← 研究首頁</a><a href="../tutorial/index.html">雙凸體教學 →</a><a href="../results/index.html">方法比較 →</a></nav>
+    <p class="eyebrow">ONE CONVEX BODY · CORE AND ENVELOPE</p>
+    <h1>單凸體幾何包絡重建</h1>
+    <p class="intro">輸入只有有限角度、有限 detector 的弦長。依序建立外包絡 <em>P</em>、內包絡 <em>Q</em>，最後輸出中點體 <em>R</em>。橢圓只負責製造示範資料，不是重建模型。</p>
+  </header>
+  <main>
+    <section class="literature" aria-labelledby="literatureTitle">
+      <div><p class="eyebrow">LITERATURE POSITION</p><h2 id="literatureTitle">哪些來自文獻，哪些是本頁的有限版本？</h2></div>
+      <article><strong>文獻原理</strong><p>Kölzow–Kuba–Volčič（1989）用遞迴的 core 與 envelope 逼近凸體，並討論離散投影資料與誤差估計。</p></article>
+      <article><strong>本頁實作</strong><p>只執行可直接驗證的一輪：投影支撐建立 <em>P</em>，弦長必存區間建立 <em>Q</em>，再取中點體。不是完整 Algorithm E。</p></article>
+      <article><strong>雙凸體延伸</strong><p>文獻處理單一凸體；本專案額外假設兩體可初始化，再由總弦長推導各體的上下界。這是條件性延伸。</p></article>
+    </section>
+
+    <section class="controls" aria-label="示範設定">
+      <label>量測角度 <select id="views"><option value="4">4 個</option><option value="8" selected>8 個</option><option value="16">16 個</option></select></label>
+      <span>無雜訊 · Δs = 0.03 · 密度 0／1</span>
+      <label class="truth-toggle"><input id="truth" type="checkbox" checked> 疊加真值（只供評估）</label>
+    </section>
+
+    <nav id="steps" class="steps" aria-label="單凸體演算法步驟"></nav>
+    <section class="lesson" aria-labelledby="stepTitle">
+      <div class="lesson-head"><div><p id="counter" class="eyebrow"></p><h2 id="stepTitle"></h2></div><div><button id="previous">← 上一步</button><button id="next" class="primary">下一步 →</button></div></div>
+      <p id="explanation" class="explanation"></p>
+      <div id="formula" class="formula"></div>
+      <p id="condition" class="condition"></p>
+    </section>
+
+    <div class="figures">
+      <section class="panel">
+        <div class="panel-head"><h3>物體平面</h3><span id="planeNote"></span></div>
+        <svg id="plane" viewBox="0 0 560 480" role="img" aria-label="單凸體包絡構造"></svg>
+        <div class="legend"><span class="truth-key">真值 D</span><span class="outer-key">外包絡 P</span><span class="inner-key">內包絡 Q</span><span class="output-key">輸出 R</span></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h3>同一份離散 Radon 資料</h3><span id="matrixSize"></span></div>
+        <svg id="sinogram" viewBox="0 0 480 250" role="img" aria-label="單凸體 sinogram"></svg>
+        <label class="ray-control">示範射線 s = <output id="sValue"></output><input id="ray" type="range" min="0" max="120" value="60"></label>
+        <svg id="interval" viewBox="0 0 480 210" role="img" aria-label="目前射線的一維區間"></svg>
+        <p id="rayNote" class="note"></p>
+      </section>
+    </div>
+
+    <section class="proof">
+      <h2>包含關係為什麼成立？</h2>
+      <div><article><span>1</span><p>每個真投影支撐都落在外側 detector 之間，所以所有條帶的交集滿足 <em>D</em> ⊆ <em>P</em>。</p></article><article><span>2</span><p>每條真弦都位於 <em>P</em> 的弦內，且長度等於量測值 <em>g</em>，因此必含中央的必存區間。</p></article><article><span>3</span><p>必存區間在 <em>D</em> 內；<em>D</em> 凸，所以它們的凸包仍在 <em>D</em> 內，得到 <em>Q</em> ⊆ <em>D</em>。</p></article><article><span>4</span><p>由支撐函數 <em>h</em><sub>Q</sub> ≤ <em>h</em><sub>D</sub> ≤ <em>h</em><sub>P</sub>，中點體滿足可計算的 Hausdorff 上界。</p></article></div>
+    </section>
+
+    <details class="details"><summary>假設、限制與文獻關係</summary>
+      <p>未知物體是非空、緊緻、有內部的凸集合，密度為 1。detector 必須覆蓋完整投影，且首尾正值外側仍各有一格。此頁使用精確無雜訊資料與浮點幾何；不是含雜訊保證。</p>
+      <p>若必存線段無法形成二維凸包，本方法只回報「沒有形成內包絡」，不能用真值補足。有限方向通常不能唯一決定所有凸體；本頁的輸出是一個帶條件性上界的代表體。</p>
+      <p>參考：D. Kölzow, A. Kuba, A. Volčič, <a href="https://doi.org/10.1007/BF02187723" target="_blank" rel="noopener"><cite>An Algorithm for Reconstructing Convex Bodies from Their Projections</cite></a>, Discrete &amp; Computational Geometry 4 (1989), 205–237。論文的完整演算法比本頁的一輪構造更廣。</p>
+    </details>
+  </main>
+  <script src="../tutorial/geometry.js"></script>
+  <script src="../tutorial/phantom.js"></script>
+  <script src="single.js"></script>
+</body>
+</html>
