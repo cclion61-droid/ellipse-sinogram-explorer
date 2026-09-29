@@ -1,0 +1,101 @@
+[
+  {
+    "shape": "slender-r37",
+    "views": 4,
+    "data": "same exact analytic sinogram as FBP and envelope method",
+    "outer_prior": "endpoint outer polygon",
+    "range_constraint": [
+      0,
+      1
+    ],
+    "threshold": 0.5,
+    "postprocess": "largest connected component inside outer mask, then convex hull",
+    "sirt500_hd": 0.008284961716386818,
+    "sirt500_seconds": 2.842636700006551,
+    "tv1500_hd": 0.012433024693345951,
+    "tv1500_seconds": 5.449763700002222,
+    "tv_history": [
+      {
+        "iterations": 500,
+        "objective": 0.550773484963745,
+        "relative_update": 0.00012088375546377068
+      },
+      {
+        "iterations": 1000,
+        "objective": 0.5036115253878979,
+        "relative_update": 5.1314877549459806e-05
+      },
+      {
+        "iterations": 1500,
+        "objective": 0.4912762729028309,
+        "relative_update": 3.158084946672548e-05
+      }
+    ]
+  },
+  {
+    "shape": "slender-r37",
+    "views": 8,
+    "data": "same exact analytic sinogram as FBP and envelope method",
+    "outer_prior": "endpoint outer polygon",
+    "range_constraint": [
+      0,
+      1
+    ],
+    "threshold": 0.5,
+    "postprocess": "largest connected component inside outer mask, then convex hull",
+    "sirt500_hd": 0.008284961716386818,
+    "sirt500_seconds": 7.226354099999298,
+    "tv1500_hd": 0.008284961716386818,
+    "tv1500_seconds": 8.674278299993603,
+    "tv_history": [
+      {
+        "iterations": 500,
+        "objective": 0.5215150996355141,
+        "relative_update": 8.209830974743111e-05
+      },
+      {
+        "iterations": 1000,
+        "objective": 0.4993190388121748,
+        "relative_update": 3.0478413767275615e-05
+      },
+      {
+        "iterations": 1500,
+        "objective": 0.49523516886593505,
+        "relative_update": 1.5947681776683437e-05
+      }
+    ]
+  },
+  {
+    "shape": "slender-r37",
+    "views": 16,
+    "data": "same exact analytic sinogram as FBP and envelope method",
+    "outer_prior": "endpoint outer polygon",
+    "range_constraint": [
+      0,
+      1
+    ],
+    "threshold": 0.5,
+    "postprocess": "largest connected component inside outer mask, then convex hull",
+    "sirt500_hd": 0.008284961716386818,
+    "sirt500_seconds": 14.4329851000075,
+    "tv1500_hd": 0.008284961716386818,
+    "tv1500_seconds": 13.821938399996725,
+    "tv_history": [
+      {
+        "iterations": 500,
+        "objective": 0.531040902393396,
+        "relative_update": 6.78606711751874e-05
+      },
+      {
+        "iterations": 1000,
+        "objective": 0.516209794075489,
+        "relative_update": 2.1060724832533277e-05
+      },
+      {
+        "iterations": 1500,
+        "objective": 0.5144881501272935,
+        "relative_update": 8.23274266457899e-06
+      }
+    ]
+  }
+]
