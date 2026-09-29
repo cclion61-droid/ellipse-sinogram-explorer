@@ -1,0 +1,58 @@
+:root {
+  color-scheme: light;
+  --paper: #f4f1ea;
+  --ink: #101e28;
+  --muted: #60717d;
+  --line: #d8d1c4;
+  --teal: #087f75;
+  --dark: #07111a;
+  font-family: Inter, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--paper); }
+.site-header { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px clamp(20px, 5vw, 72px); border-bottom: 1px solid var(--line); }
+.brand { color: var(--ink); font-size: 15px; font-weight: 750; text-decoration: none; letter-spacing: .02em; }
+main { max-width: 1290px; margin: auto; padding: 0 clamp(20px, 5vw, 72px) 90px; }
+.hero { padding: clamp(64px, 9vw, 125px) 0 68px; }
+.eyebrow, .kicker { margin: 0 0 14px; color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .15em; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { max-width: 1050px; margin-bottom: 24px; font-family: Georgia, "Noto Serif TC", serif; font-size: clamp(44px, 7vw, 90px); font-weight: 500; line-height: 1.04; letter-spacing: -.055em; }
+.lead { max-width: 780px; color: var(--muted); font-size: clamp(17px, 1.5vw, 20px); line-height: 1.75; }
+.verdict { display: grid; grid-template-columns: 150px 1fr; gap: 24px; max-width: 900px; margin-top: 38px; padding: 24px 28px; color: #eaf7f5; background: var(--dark); line-height: 1.65; }
+.verdict strong { color: #6bd5c8; }
+.section { padding: 58px 0; border-top: 1px solid var(--line); }
+.section > h2, .finding h2, .claims h2, .next h2 { margin-bottom: 24px; font-family: Georgia, "Noto Serif TC", serif; font-size: clamp(30px, 4vw, 52px); font-weight: 500; letter-spacing: -.025em; }
+.flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.flow article { min-height: 245px; padding: 26px; color: #edf7f6; background: #0c3441; }
+.flow article:nth-child(even) { background: #114754; }
+.flow span { color: #65d4c7; font-size: 12px; font-weight: 800; letter-spacing: .15em; }
+.flow h3 { margin: 46px 0 14px; font-family: Georgia, "Noto Serif TC", serif; font-size: 24px; font-weight: 500; }
+.flow p, .note { color: #aec2c9; line-height: 1.65; }
+.note { max-width: 900px; color: var(--muted); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; min-width: 760px; border-collapse: collapse; background: #fff; }
+th, td { padding: 17px 20px; border-bottom: 1px solid #e4dfd5; text-align: left; }
+th { color: var(--muted); font-size: 12px; letter-spacing: .06em; }
+td { font-variant-numeric: tabular-nums; }
+.tag { display: inline-block; padding: 5px 9px; border-radius: 999px; font-size: 12px; font-weight: 750; }
+.pass { color: #09685e; background: #d8f2ed; }
+.conditional { color: #7b5d00; background: #fff0bf; }
+.fail { color: #982d2d; background: #f7dddd; }
+.finding { display: grid; grid-template-columns: 1.1fr 1fr; gap: 50px; padding: 58px clamp(26px, 4vw, 58px); color: #eef8f7; background: var(--dark); }
+.finding p:last-child { align-self: center; margin: 0; color: #b6c9cf; font-size: 17px; line-height: 1.8; }
+.finding strong { color: #72ded0; }
+.claims { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 58px 0; }
+.claims article { padding: clamp(28px, 4vw, 50px); border: 1px solid var(--line); }
+.claims p:last-child, .next p:last-child { margin: 0; color: var(--muted); line-height: 1.8; }
+.claims .no { background: #ece6dc; }
+.next { padding: 58px 0 0; border-top: 1px solid var(--line); }
+.next p:last-child { max-width: 900px; font-size: 18px; }
+footer { padding: 25px; color: #82909a; background: var(--dark); font-size: 12px; text-align: center; }
+code { font-family: "SFMono-Regular", Consolas, monospace; }
+@media (max-width: 1050px) { .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .flow article:last-child { grid-column: 1 / -1; } }
+@media (max-width: 720px) {
+  .site-header { align-items: flex-start; flex-direction: column; }
+  .verdict, .finding, .claims { grid-template-columns: 1fr; }
+  .flow { grid-template-columns: 1fr; }
+  .flow article:last-child { grid-column: auto; }
+}
