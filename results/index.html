@@ -174,15 +174,48 @@
       <div id="failures" class="failure-panel">
         <div class="failure-heading">
           <p class="eyebrow">FAILURE ACCOUNTING</p>
-          <h3>四個沒有幾何輸出的案例</h3>
-          <p>圖左是真值，圖右是事後選出的最接近分離量測角。紅帶表示投影仍重疊，正值沒有分成兩段，無法建立雙區塊錨點。四例不計入成功案例誤差。</p>
+          <h3>四個原初始化失敗案例：加入分離線搜尋</h3>
+          <p>四例使用同一份 8 角度總 sinogram。FBP、SIRT、TV 只使用總端點外框；第五欄先搜尋未知分離線，再做雙凸體包絡。</p>
         </div>
-        <div class="failure-grid">
-          <figure class="failure-card"><img src="assets/failure_small_gap_2.png" alt="small_gap_2：兩個真值凸體及最佳量測角的單段正值曲線，兩體投影仍重疊" loading="lazy"><figcaption><strong>small_gap_2</strong><span>最佳量測角投影仍重疊 0.0081；可分離方向落在角度網格之間。</span></figcaption></figure>
-          <figure class="failure-card"><img src="assets/failure_unresolved_gap_0.png" alt="unresolved_gap_0：兩圓真值與最佳量測角的單段正值曲線" loading="lazy"><figcaption><strong>unresolved_gap_0</strong><span>真間距 0.001；最佳量測角投影重疊 0.0152。</span></figcaption></figure>
-          <figure class="failure-card"><img src="assets/failure_unresolved_gap_1.png" alt="unresolved_gap_1：兩圓真值與最佳量測角的單段正值曲線" loading="lazy"><figcaption><strong>unresolved_gap_1</strong><span>真間距 0.001；最佳量測角投影重疊 0.0152。</span></figcaption></figure>
-          <figure class="failure-card"><img src="assets/failure_unresolved_gap_2.png" alt="unresolved_gap_2：兩圓真值與最佳量測角的單段正值曲線" loading="lazy"><figcaption><strong>unresolved_gap_2</strong><span>真間距 0.001；最佳量測角投影重疊 0.0152。</span></figcaption></figure>
+        <div class="matrix-scroll" role="region" aria-label="四個初始化失敗案例的五欄比較" tabindex="0">
+          <div class="comparison-grid separator-grid">
+            <div class="corner-label">案例</div>
+            <div class="column-label"><strong>真值</strong><span>Truth</span></div>
+            <div class="column-label"><strong>FBP 0.5</strong><span class="truth-key">紅：真值</span></div>
+            <div class="column-label"><strong>SIRT 500</strong><span class="truth-key">紅：真值</span></div>
+            <div class="column-label"><strong>TV 1500</strong><span class="truth-key">紅：真值</span></div>
+            <div class="column-label"><strong>分離線搜尋＋包絡</strong><span>紅／藍／黃：真值／外／內</span></div>
+
+            <div class="row-label"><strong>small_gap_2</strong><span>原方法無雙區塊錨點</span></div>
+            <figure class="visual-cell"><img src="assets/separator_small_gap_2_truth.png" alt="small_gap_2 真值" loading="lazy"></figure>
+            <figure class="visual-cell"><img src="assets/separator_small_gap_2_fbp.png" alt="small_gap_2 FBP" loading="lazy"><figcaption>HD 1.111301 · 13 碎片</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_small_gap_2_sirt500.png" alt="small_gap_2 SIRT" loading="lazy"><figcaption>4 碎片 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_small_gap_2_tv1500.png" alt="small_gap_2 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_small_gap_2_geometry.png" alt="small_gap_2 分離線搜尋與包絡" loading="lazy"><figcaption class="winner">HD 0.001021 · 界 0.001057</figcaption></figure>
+
+            <div class="row-label"><strong>unresolved_gap_0</strong><span>最低殘差分支切入真體</span><em class="status-bad">不具認證</em></div>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_truth.png" alt="unresolved_gap_0 真值" loading="lazy"></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_fbp.png" alt="unresolved_gap_0 FBP" loading="lazy"><figcaption>HD 0.886026 · 15 碎片</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_sirt500.png" alt="unresolved_gap_0 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_tv1500.png" alt="unresolved_gap_0 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_geometry.png" alt="unresolved_gap_0 分離線搜尋與包絡" loading="lazy"><figcaption class="not-certified">HD 0.002924 · 所列界不具認證</figcaption></figure>
+
+            <div class="row-label"><strong>unresolved_gap_1</strong><span>保留 14 個相容候選</span><em>條件式</em></div>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_truth.png" alt="unresolved_gap_1 真值" loading="lazy"></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_fbp.png" alt="unresolved_gap_1 FBP" loading="lazy"><figcaption>HD 0.884224 · 12 碎片</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_sirt500.png" alt="unresolved_gap_1 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_tv1500.png" alt="unresolved_gap_1 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_geometry.png" alt="unresolved_gap_1 分離線搜尋與包絡" loading="lazy"><figcaption class="conditional-result">HD 0.002378 · 條件式界 0.006241</figcaption></figure>
+
+            <div class="row-label"><strong>unresolved_gap_2</strong><span>保留 19 個相容候選</span><em>條件式</em></div>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_truth.png" alt="unresolved_gap_2 真值" loading="lazy"></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_fbp.png" alt="unresolved_gap_2 FBP" loading="lazy"><figcaption>HD 0.877390 · 21 碎片</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_sirt500.png" alt="unresolved_gap_2 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_tv1500.png" alt="unresolved_gap_2 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_geometry.png" alt="unresolved_gap_2 分離線搜尋與包絡" loading="lazy"><figcaption class="conditional-result">HD 0.005057 · 條件式界 0.009285</figcaption></figure>
+          </div>
         </div>
+        <p class="failure-note"><code>unresolved_gap_0</code> 的最佳分支切入真體 8.16×10<sup>−5</sup>；因此 0.005688 不能當成誤差認證。<a href="assets/separator_five_column_metrics.json">完整數值</a></p>
       </div>
     </section>
 
