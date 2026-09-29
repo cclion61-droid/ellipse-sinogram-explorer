@@ -100,10 +100,15 @@ thead th { color: var(--muted); font-size: 10px; letter-spacing: .08em; text-tra
 .section-dark .best { color: var(--teal-bright); }
 .footnote { grid-column: 1 / -1; margin: -10px 0 0; color: var(--muted); font-size: 11px; }
 
-.failure-panel { display: grid; grid-template-columns: minmax(280px, .9fr) minmax(420px, 1.1fr); gap: 45px; max-width: 1450px; margin: 22px auto 0; padding: 28px; border: 1px solid rgba(217,72,79,.35); background: rgba(217,72,79,.06); }
-.failure-panel ul { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.failure-panel li { display: flex; justify-content: space-between; gap: 12px; padding: 13px; border: 1px solid #2a3c47; background: #0a1721; font-size: 12px; }
-.failure-panel li span { color: #df8d91; }
+.failure-panel { max-width: 1450px; margin: 22px auto 0; padding: 28px; border: 1px solid rgba(217,72,79,.35); background: rgba(217,72,79,.06); scroll-margin-top: 90px; }
+.failure-heading { max-width: 930px; margin-bottom: 22px; }
+.failure-heading p:last-child { color: #a9bac4; line-height: 1.6; }
+.failure-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.failure-card { min-width: 0; margin: 0; padding: 10px; border: 1px solid #2a3c47; background: #0a1721; }
+.failure-card img { display: block; width: 100%; height: auto; }
+.failure-card figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 9px 5px 3px; font-size: 12px; line-height: 1.5; }
+.failure-card figcaption strong { color: #f2c1c4; font-family: "SFMono-Regular", Consolas, monospace; }
+.failure-card figcaption span { color: #a9bac4; }
 
 .notes-section { display: grid; grid-template-columns: .55fr 1.45fr; gap: 70px; max-width: 1450px; margin: 0 auto; padding: 90px clamp(20px, 5vw, 78px); }
 .note-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -119,7 +124,7 @@ footer { padding: 25px; color: #82909a; background: var(--dark); font-size: 11px
   .hero { grid-template-columns: 1fr; }
   .hero-card { max-width: 520px; }
   .section-head { align-items: flex-start; flex-direction: column; }
-  .data-card, .failure-panel, .notes-section { grid-template-columns: 1fr; }
+  .data-card, .notes-section { grid-template-columns: 1fr; }
   .source-line { grid-column: 1; }
 }
 
@@ -129,7 +134,9 @@ footer { padding: 25px; color: #82909a; background: var(--dark); font-size: 11px
   nav a:not(.nav-quiet) { display: none; }
   h1 { font-size: 43px; }
   .hero, .benchmark-section, .notes-section { padding-left: 15px; padding-right: 15px; }
-  .failure-panel ul, .note-grid { grid-template-columns: 1fr; }
+  .failure-grid, .note-grid { grid-template-columns: 1fr; }
+  .failure-card figcaption { display: block; }
+  .failure-card figcaption span { display: block; margin-top: 3px; }
   .data-card, .failure-panel { padding: 20px; }
 }
 

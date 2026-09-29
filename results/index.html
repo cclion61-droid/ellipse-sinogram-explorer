@@ -15,8 +15,9 @@
       <span><small>RADON GEOMETRY LAB</small><strong>重建方法比較圖譜</strong></span>
     </a>
     <nav aria-label="主要導覽">
-      <a href="#single">單凸體</a>
       <a href="#double">雙凸體</a>
+      <a href="#failures">失敗案例</a>
+      <a href="#single">單凸體對照</a>
       <a href="#limits">限制</a>
       <a class="nav-quiet" href="../tutorial/index.html">逐步教學</a>
     </nav>
@@ -25,9 +26,9 @@
   <main>
     <section class="hero">
       <div class="hero-copy">
-      <p class="eyebrow">05 · VISUAL BENCHMARK · 2026-09-29</p>
+      <p class="eyebrow">RECONSTRUCTION COMPARISON · 2026-09-29</p>
         <h1>同一份投影資料，<br>把每種方法放在同一列看。</h1>
-        <p class="lede">版面採論文常用的比較矩陣：列是案例或量測條件，欄是重建方法。所有圖片由已保存的實驗資料重建；紅線是評估用真值，不是演算法輸入。</p>
+        <p class="lede">先看雙凸體，再看單凸體對照與初始化失敗。紅線只供評估，不是重建輸入。</p>
       </div>
       <aside class="hero-card" aria-label="評估摘要">
         <p>主要指標</p>
@@ -162,18 +163,18 @@
         </div>
       </div>
 
-      <div class="failure-panel">
-        <div>
+      <div id="failures" class="failure-panel">
+        <div class="failure-heading">
           <p class="eyebrow">FAILURE ACCOUNTING</p>
-          <h3>十二例中另有四例沒有幾何輸出</h3>
-          <p>四例都找不到「兩段正值、中間至少兩個零 detector 點」的可認證錨點。它們不列入上面的誤差中位數。</p>
+          <h3>四個沒有幾何輸出的案例</h3>
+          <p>圖左是診斷用真值；圖右是最佳量測角的總弦長。紅帶表示兩體投影仍重疊，正值沒有分成兩段，因此無法建立雙區塊錨點。這四例不計入成功案例誤差。</p>
         </div>
-        <ul>
-          <li><code>small_gap_2</code><span>無雙區塊錨點</span></li>
-          <li><code>unresolved_gap_0</code><span>無雙區塊錨點</span></li>
-          <li><code>unresolved_gap_1</code><span>無雙區塊錨點</span></li>
-          <li><code>unresolved_gap_2</code><span>無雙區塊錨點</span></li>
-        </ul>
+        <div class="failure-grid">
+          <figure class="failure-card"><img src="assets/failure_small_gap_2.png" alt="small_gap_2：兩個真值凸體及最佳量測角的單段正值曲線，兩體投影仍重疊" loading="lazy"><figcaption><strong>small_gap_2</strong><span>最佳量測角投影仍重疊 0.0081；可分離方向落在角度網格之間。</span></figcaption></figure>
+          <figure class="failure-card"><img src="assets/failure_unresolved_gap_0.png" alt="unresolved_gap_0：兩圓真值與最佳量測角的單段正值曲線" loading="lazy"><figcaption><strong>unresolved_gap_0</strong><span>真間距 0.001；最佳量測角投影重疊 0.0152。</span></figcaption></figure>
+          <figure class="failure-card"><img src="assets/failure_unresolved_gap_1.png" alt="unresolved_gap_1：兩圓真值與最佳量測角的單段正值曲線" loading="lazy"><figcaption><strong>unresolved_gap_1</strong><span>真間距 0.001；最佳量測角投影重疊 0.0152。</span></figcaption></figure>
+          <figure class="failure-card"><img src="assets/failure_unresolved_gap_2.png" alt="unresolved_gap_2：兩圓真值與最佳量測角的單段正值曲線" loading="lazy"><figcaption><strong>unresolved_gap_2</strong><span>真間距 0.001；最佳量測角投影重疊 0.0152。</span></figcaption></figure>
+        </div>
       </div>
     </section>
 
