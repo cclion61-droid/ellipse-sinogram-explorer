@@ -3,20 +3,23 @@
     {
       "views": 4,
       "shape": "slender-r37",
-      "fbp_hd": 0.13490715776260154,
-      "endpoint_hd": 0.14253383299527034
+      "fbp_0_5_hd": 0.13490715776260154,
+      "envelope_midpoint_hd": 0.07028644258587247,
+      "envelope_bound": 0.07497578269017818
     },
     {
       "views": 8,
       "shape": "slender-r37",
-      "fbp_hd": 0.025129246455787624,
-      "endpoint_hd": 0.03257884405699685
+      "fbp_0_5_hd": 0.025129246455787624,
+      "envelope_midpoint_hd": 0.018117141419805305,
+      "envelope_bound": 0.020568619846543654
     },
     {
       "views": 16,
       "shape": "slender-r37",
-      "fbp_hd": 0.005054664112790985,
-      "endpoint_hd": 0.00913007103470087
+      "fbp_0_5_hd": 0.005054664112790985,
+      "envelope_midpoint_hd": 0.008921182957623619,
+      "envelope_bound": 0.009267247578640142
     }
   ],
   "double": [
