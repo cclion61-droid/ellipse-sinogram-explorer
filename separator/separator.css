@@ -38,6 +38,27 @@ td { font-variant-numeric: tabular-nums; }
 .pass { color: #09685e; background: #d8f2ed; }
 .conditional { color: #7b5d00; background: #fff0bf; }
 .fail { color: #982d2d; background: #f7dddd; }
+.matrix-scroll { margin-top: 28px; padding-bottom: 8px; overflow-x: auto; scrollbar-color: var(--teal) transparent; }
+.comparison-grid { display: grid; min-width: 1120px; gap: 5px; }
+.separator-grid { grid-template-columns: 170px repeat(5, minmax(170px, 1fr)); }
+.corner-label, .column-label, .row-label { display: flex; justify-content: center; flex-direction: column; }
+.corner-label { align-items: flex-start; padding: 12px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+.column-label { align-items: center; min-height: 65px; padding: 9px 8px; text-align: center; }
+.column-label strong { font-family: Georgia, "Noto Serif TC", serif; font-size: 17px; }
+.column-label span { margin-top: 4px; color: var(--muted); font-size: 11px; }
+.row-label { align-items: flex-start; min-height: 204px; padding: 15px 14px; border-top: 1px solid var(--line); }
+.row-label strong { font-family: "SFMono-Regular", Consolas, monospace; font-size: 15px; }
+.row-label span { margin-top: 6px; color: var(--muted); font-size: 12px; }
+.row-label em { margin-top: 15px; color: #8b6900; font-size: 10px; font-style: normal; font-weight: 800; letter-spacing: .08em; }
+.row-label em.bad { color: #b4373d; }
+.visual-cell { position: relative; min-height: 204px; margin: 0; overflow: hidden; background: #02070b; }
+.visual-cell img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.visual-cell figcaption { position: absolute; left: 8px; right: 8px; bottom: 8px; padding: 6px 8px; border: 1px solid rgba(255,255,255,.16); color: #e7f0f3; background: rgba(3,9,13,.8); font-family: "SFMono-Regular", Consolas, monospace; font-size: 10px; text-align: center; }
+.visual-cell figcaption.pass-result { border-color: rgba(72,216,199,.55); color: #bafff5; }
+.visual-cell figcaption.conditional-result { border-color: rgba(212,154,36,.7); color: #ffe2a0; }
+.visual-cell figcaption.bad-result { border-color: rgba(217,72,79,.8); color: #ffc2c5; }
+.matrix-note { margin: 16px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+.matrix-note a { color: var(--teal); }
 .finding { display: grid; grid-template-columns: 1.1fr 1fr; gap: 50px; padding: 58px clamp(26px, 4vw, 58px); color: #eef8f7; background: var(--dark); }
 .finding p:last-child { align-self: center; margin: 0; color: #b6c9cf; font-size: 17px; line-height: 1.8; }
 .finding strong { color: #72ded0; }
