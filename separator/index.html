@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="無可見零間隙時的未知分離線搜尋、雙凸體包絡更新與四個失敗案例驗證。">
+  <title>分離線搜尋驗證｜Radon Geometry Lab</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="separator.css">
+  <link rel="stylesheet" href="../shared-nav.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">RADON GEOMETRY LAB</a>
+    <nav class="research-nav" aria-label="研究導覽">
+      <a href="../index.html">研究首頁</a>
+      <a href="../single/index.html">單凸體重建</a>
+      <a href="../tutorial/index.html">雙凸體重建</a>
+      <a href="../results/index.html">方法比較</a>
+      <a href="index.html" aria-current="page">分離線搜尋</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">UNKNOWN SEPARATOR · BRANCH SEARCH · CONDITIONAL BOUNDS</p>
+      <h1>看不到零間隙，<br>就搜尋未知分離線。</h1>
+      <p class="lead">目的不是猜一條最好的線，而是找出所有仍與總 sinogram 相容的分離方式，再判斷資料是否足以限制兩個凸體。</p>
+      <div class="verdict">
+        <strong>目前結論</strong>
+        <span>四個初始化失敗例都能產生候選重建；但只有保留全部未安全排除的分支，才有機會建立無條件誤差界。</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="method-title">
+      <p class="kicker">METHOD</p>
+      <h2 id="method-title">五個步驟</h2>
+      <div class="flow">
+        <article><span>01</span><h3>全域外框</h3><p>由總 sinogram 的最外側端點，建立同時包含兩體的凸多邊形。</p></article>
+        <article><span>02</span><h3>參數盒搜尋</h3><p>用方向與位置描述分離線；保留整塊參數區域，不只測已量測角度。</p></article>
+        <article><span>03</span><h3>兩體包絡</h3><p>每個假設建立兩個外包絡，再由總弦長扣除另一體的最大貢獻，得到必存線段。</p></article>
+        <article><span>04</span><h3>收縮與排除</h3><p>反覆更新內外包絡；只在必要條件矛盾時排除整個參數盒。</p></article>
+        <article><span>05</span><h3>跨分支判定</h3><p>若所有存活分支都落在小範圍內就輸出；否則明確回報資料仍不足。</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="results-title">
+      <p class="kicker">VALIDATION · 2026-09-30</p>
+      <h2 id="results-title">四個無可見零間隙案例</h2>
+      <p class="note">搜尋只使用總投影、探測器座標與 8 個量測角度；真值只在搜尋完成後評估。每例最多測試 300 條候選分離線，因此這是可行性驗證，不是全域搜尋證明。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>案例</th><th>相容候選</th><th>Hausdorff 誤差</th><th>條件式界</th><th>判定</th></tr></thead>
+          <tbody>
+            <tr><td>small_gap_2</td><td>6</td><td>0.001021</td><td>0.001057</td><td><span class="tag pass">通過</span></td></tr>
+            <tr><td>unresolved_gap_0</td><td>16</td><td>0.002924</td><td>0.005688</td><td><span class="tag fail">不具認證</span></td></tr>
+            <tr><td>unresolved_gap_1</td><td>14</td><td>0.002378</td><td>0.006241</td><td><span class="tag conditional">條件式通過</span></td></tr>
+            <tr><td>unresolved_gap_2</td><td>19</td><td>0.005057</td><td>0.009285</td><td><span class="tag conditional">條件式通過</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="finding" aria-labelledby="finding-title">
+      <div>
+        <p class="kicker">COUNTEREXAMPLE</p>
+        <h2 id="finding-title">最低殘差不等於可認證。</h2>
+      </div>
+      <p><code>unresolved_gap_0</code> 的最低殘差分離線仍切入真體約 <strong>8.16 × 10<sup>−5</sup></strong>。因此只保留殘差最佳的一條線，不能保證真值位於外包絡內。</p>
+    </section>
+
+    <section class="claims" aria-label="研究主張邊界">
+      <article class="yes">
+        <p class="kicker">SUPPORTED</p>
+        <h2>目前可以說</h2>
+        <p>在空間分離但離散取樣看不到零間隙時，分離線搜尋能讓四個既有失敗例全部產生二維內種子與候選重建。</p>
+      </article>
+      <article class="no">
+        <p class="kicker">NOT YET SUPPORTED</p>
+        <h2>目前不能說</h2>
+        <p>選最低殘差分離線即可得到包含真值的包絡，或目前的有限候選搜尋已給出無條件 Hausdorff 誤差界。</p>
+      </article>
+    </section>
+
+    <section class="next" aria-labelledby="next-title">
+      <p class="kicker">NEXT THEORETICAL STEP</p>
+      <h2 id="next-title">從「最佳線」改成「全部存活參數盒」。</h2>
+      <p>以保守外包絡描述每個分離線參數盒，只用必要條件安全排除整盒；最後對所有未排除分支計算跨分支誤差界。若界仍大，就誠實回報資料不足。</p>
+    </section>
+  </main>
+  <footer>這一頁呈現已完成的無雜訊可行性驗證；無條件認證仍是下一個理論問題。</footer>
+</body>
+</html>
