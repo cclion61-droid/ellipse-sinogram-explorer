@@ -1,10 +1,14 @@
 # Radon Geometry Lab
 
-目前主線是[雙凸體重建](tutorial/index.html)與[方法比較](results/index.html)。L 型切法研究保留為獨立工具。
+目前主線是[單凸體基礎](single/index.html)、[雙凸體延伸](tutorial/index.html)與[方法比較](results/index.html)。L 型切法研究保留為獨立工具。
+
+## 單凸體重建
+
+開啟 **[single/index.html](single/index.html)**。七步展示有限離散 Radon 資料如何形成投影支撐、外包絡 `P`、必存弦段、內包絡 `Q`、中點輸出與可計算的 Hausdorff 上界。頁面參考 Kölzow–Kuba–Volčič (1989) 的 core/envelope 原理，但只實作一輪可直接驗證的有限版本，不冒稱完整 Algorithm E。
 
 ## 雙凸體重建
 
-開啟 **[tutorial/index.html](tutorial/index.html)**，從同一張雙凸體總 sinogram 出發，以 10 步展示端點、內外包絡與輸出。重建端不知道橢圓參數。演算法細節與測試見[教學 README](tutorial/README.md)。
+開啟 **[tutorial/index.html](tutorial/index.html)**，從同一張雙凸體總 sinogram 出發，以 10 步展示端點、可分離初始化、弦長上下界、內外包絡與輸出。重建端不知道個別 component sinogram 或橢圓參數。這是帶初始化條件的雙體延伸，不是 1989 論文已提出的雙體演算法。演算法細節與測試見[教學 README](tutorial/README.md)。
 
 ## 重建方法比較
 

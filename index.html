@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="雙凸體 Radon 幾何重建教學、方法比較與失敗案例。">
-  <title>雙凸體重建｜Radon Geometry Lab</title>
+  <meta name="description" content="單凸體與雙凸體 Radon 幾何包絡重建教學、方法比較與失敗案例。">
+  <title>凸體幾何重建｜Radon Geometry Lab</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="home.css">
 </head>
@@ -12,6 +12,7 @@
   <header class="topbar">
     <a class="brand" href="index.html">RADON GEOMETRY LAB</a>
     <nav aria-label="主要導覽">
+      <a href="single/index.html">單凸體重建</a>
       <a href="tutorial/index.html">雙凸體重建</a>
       <a href="results/index.html">方法比較</a>
       <a href="#other">其他研究</a>
@@ -19,19 +20,25 @@
   </header>
   <main>
     <section class="hero">
-      <p class="eyebrow">CURRENT FOCUS · TWO CONVEX BODIES</p>
-      <h1>從一張總 sinogram<br>重建兩個凸體。</h1>
-      <p>先看演算法如何建立內外包絡，再看相同資料下的重建比較與失敗案例。</p>
+      <p class="eyebrow">CORE · ENVELOPE · FINITE RADON DATA</p>
+      <h1>先理解單凸體，<br>再處理兩體總 sinogram。</h1>
+      <p>從文獻中的 core/envelope 原理出發，先看單凸體的一輪構造，再看雙凸體如何在可分離條件下共享同一套包含關係。</p>
     </section>
     <section class="focus" aria-label="目前研究主線">
+      <a href="single/index.html">
+        <span class="number">01 / FOUNDATION</span>
+        <h2>單凸體重建</h2>
+        <p>七步看投影支撐、外包絡、必存線段、內包絡與 Hausdorff 上界。</p>
+        <span class="go">打開基礎教學 →</span>
+      </a>
       <a href="tutorial/index.html">
-        <span class="number">01 / METHOD</span>
+        <span class="number">02 / EXTENSION</span>
         <h2>雙凸體重建</h2>
         <p>逐步看總弦長、分離視角、內外包絡與最後的輪廓輸出。</p>
         <span class="go">打開逐步教學 →</span>
       </a>
       <a href="results/index.html">
-        <span class="number">02 / EVIDENCE</span>
+        <span class="number">03 / EVIDENCE</span>
         <h2>重建方法比較</h2>
         <p>同份投影資料比較幾何法、FBP、SIRT、TV；四個初始化失敗案例另附圖說明。</p>
         <span class="go">查看圖像與誤差 →</span>
