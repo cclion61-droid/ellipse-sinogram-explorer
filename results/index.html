@@ -7,18 +7,16 @@
   <meta name="theme-color" content="#07111a">
   <title>重建方法比較圖譜｜Radon Geometry Lab</title>
   <link rel="stylesheet" href="results.css">
-  <link rel="stylesheet" href="../shared-nav.css">
+  <link rel="stylesheet" href="../shared-nav.css?v=2">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="../index.html">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span><small>RADON GEOMETRY LAB</small><strong>重建方法比較圖譜</strong></span>
-    </a>
+    <a class="site-brand" href="../index.html">RADON GEOMETRY LAB</a>
     <nav class="research-nav" aria-label="研究導覽">
       <a href="../index.html">研究首頁</a>
       <a href="../single/index.html">單凸體重建</a>
       <a href="../tutorial/index.html">雙凸體重建</a>
+      <a href="../sirt/index.html">SIRT／TV</a>
       <a class="nav-quiet" href="index.html" aria-current="page">方法比較</a>
       <a href="../separator/index.html">分離線搜尋</a>
     </nav>
@@ -37,7 +35,7 @@
         <strong>Hausdorff distance</strong>
         <span>越低越好</span>
         <dl>
-          <div><dt>單凸體</dt><dd>9 形狀 × 8 種角度數</dd></div>
+          <div><dt>單凸體</dt><dd>3 形狀；8 angles</dd></div>
           <div><dt>雙凸體</dt><dd>12 例；8 成功、4 失敗</dd></div>
           <div><dt>資料</dt><dd>無雜訊，Δs = 0.01</dd></div>
         </dl>
@@ -50,58 +48,44 @@
           <p class="eyebrow">01 · SINGLE CONVEX BODY</p>
           <h2>單凸體：同一份 sinogram 的五欄比較</h2>
         </div>
-        <p>橢圓比較 4、8、16 個角度；三角形與不規則六邊形使用 8 個角度。每列使用同一份無雜訊投影資料。</p>
+        <p>橢圓、三角形與不規則六邊形皆使用 8 個無雜訊角度。每列使用同一份投影資料。</p>
       </div>
 
       <div class="single-model">
         <p><strong>模型</strong>　未知物體 <em>D</em> 非空、緊緻、凸且有內部，密度為 1。資料無雜訊；detector 覆蓋完整投影，每個量測方向至少有一筆正值及兩側相鄰外點。</p>
-        <p><strong>重建</strong>　正值投影的外側端點給出 <em>P</em>。若一條量測線與 <em>P</em> 的交段是 [a,b]、實測弦長是 <em>g</em>，則非空時 [b−g,a+g] 必在 <em>D</em> 內。這些線段的凸包是 <em>Q</em>；輸出 <em>R</em>=(<em>Q</em>+<em>P</em>)/2。</p>
-        <p><strong>保證</strong>　若 <em>Q</em> 非空，則 <em>Q</em>⊆<em>D</em>⊆<em>P</em>，且 <em>d</em><sub>H</sub>(<em>D</em>,<em>R</em>)≤½<em>d</em><sub>H</sub>(<em>P</em>,<em>Q</em>)。這裡展示一輪包絡；雙凸體另有交替細化。</p>
+        <p><strong>重建</strong>　端點建立 <em>P</em><sub>0</sub>，必存弦段建立 <em>Q</em><sub>0</sub>。每輪由 <em>Q</em> 與實測弦長找出確定外點、收縮 <em>P</em>，再重算必存弦段以擴張 <em>Q</em>。四輪後輸出 <em>R</em>=(<em>Q</em>+<em>P</em>)/2。</p>
+        <p><strong>保證</strong>　每輪保持 <em>Q</em>⊆<em>D</em>⊆<em>P</em>，因此 <em>d</em><sub>H</sub>(<em>D</em>,<em>R</em>)≤½<em>d</em><sub>H</sub>(<em>P</em>,<em>Q</em>)。</p>
       </div>
 
       <div class="matrix-scroll" role="region" aria-label="單凸體五種方法比較" tabindex="0">
         <div class="comparison-grid single-grid">
           <div class="corner-label">量測條件</div>
           <div class="column-label"><strong>真值</strong><span>Truth</span></div>
-          <div class="column-label"><strong>FBP 0.5</strong><span class="truth-key">灰：凸化後輪廓；紅：真值</span></div>
-          <div class="column-label"><strong>SIRT 500</strong><span class="truth-key">紅：真值</span></div>
-          <div class="column-label"><strong>TV 1500</strong><span class="truth-key">紅：真值</span></div>
+          <div class="column-label"><strong>FBP 0.5</strong><span class="truth-key">灰階：重建；紅：真值</span></div>
+          <div class="column-label"><strong>SIRT 500</strong><span class="truth-key">灰階：重建；紅：真值</span></div>
+          <div class="column-label"><strong>TV 1500</strong><span class="truth-key">灰階：重建；紅：真值</span></div>
           <div class="column-label"><strong>幾何包絡法</strong><span>灰：輸出 R；藍：外 P；黃：內 Q；紅：真值</span></div>
 
-          <div class="row-label"><strong>橢圓 · 4 angles</strong><span>0°–135°</span><em>極少角度</em></div>
-          <figure class="visual-cell"><img src="assets/single_m4_truth.png" alt="四角度單凸體真值"></figure>
-          <figure class="visual-cell"><img src="assets/single_m4_fbp_level.png" alt="四角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.134907</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m4_sirt500.png" alt="四角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m4_tv1500.png" alt="四角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.012433</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m4_envelope.png" alt="四角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.070286 · 界 0.074976</figcaption></figure>
-
           <div class="row-label"><strong>橢圓 · 8 angles</strong><span>0°–157.5°</span><em>主實驗設定</em></div>
-          <figure class="visual-cell"><img src="assets/single_m8_truth.png" alt="八角度單凸體真值"></figure>
-          <figure class="visual-cell"><img src="assets/single_m8_fbp_level.png" alt="八角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.025129</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m8_sirt500.png" alt="八角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m8_tv1500.png" alt="八角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m8_envelope.png" alt="八角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.018117 · 界 0.020569</figcaption></figure>
-
-          <div class="row-label"><strong>橢圓 · 16 angles</strong><span>0°–168.75°</span><em>較密角度</em></div>
-          <figure class="visual-cell"><img src="assets/single_m16_truth.png" alt="十六角度單凸體真值"></figure>
-          <figure class="visual-cell"><img src="assets/single_m16_fbp_level.png" alt="十六角度 FBP 0.5 凸化輪廓與真值疊圖"><figcaption>HD 0.005055</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m16_sirt500.png" alt="十六角度 SIRT 500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m16_tv1500.png" alt="十六角度 TV 1500 凸化輪廓與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_m16_envelope.png" alt="十六角度單凸體內外包絡、中點重建與真值"><figcaption>HD 0.008921 · 界 0.009267</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_truth.png?v=2" alt="八角度單凸體真值"></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_fbp_overlay.png?v=2" alt="八角度 FBP 灰階重建與真值疊圖"><figcaption>HD 0.025129</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_sirt500.png?v=2" alt="八角度 SIRT 500 灰階重建與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_tv1500.png?v=2" alt="八角度 TV 1500 灰階重建與真值疊圖"><figcaption>HD 0.008285</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_m8_envelope.png?v=3" alt="八角度單凸體反覆細化後的內外包絡、中點重建與真值"><figcaption class="winner">HD 0.004068 · 界 0.005817</figcaption></figure>
 
           <div class="row-label"><strong>三角形 · 8 angles</strong><span>尖角凸體</span></div>
-          <figure class="visual-cell"><img src="assets/single_triangle_m8_truth.png" alt="八角度三角形真值" loading="lazy"></figure>
-          <figure class="visual-cell"><img src="assets/single_triangle_m8_fbp.png" alt="八角度三角形 FBP 0.5 凸化輪廓與真值" loading="lazy"><figcaption>HD 0.101076</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_triangle_m8_sirt500.png" alt="八角度三角形 SIRT 500 凸化輪廓與真值" loading="lazy"><figcaption class="winner">HD 0.023125</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_triangle_m8_tv1500.png" alt="八角度三角形 TV 1500 凸化輪廓與真值" loading="lazy"><figcaption>HD 0.035377</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_triangle_m8_envelope.png" alt="八角度三角形幾何內外包絡、中點重建與真值" loading="lazy"><figcaption>HD 0.078998 · 界 0.079962</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_truth.png?v=2" alt="八角度三角形真值" loading="lazy"></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_fbp.png?v=2" alt="八角度三角形 FBP 灰階重建與真值" loading="lazy"><figcaption>HD 0.101076</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_sirt500.png?v=3" alt="八角度三角形 SIRT 500 灰階重建與真值" loading="lazy"><figcaption>HD 0.024788</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_tv1500.png?v=3" alt="八角度三角形 TV 1500 灰階重建與真值" loading="lazy"><figcaption>HD 0.024788</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_triangle_m8_envelope.png?v=3" alt="八角度三角形反覆細化後的幾何包絡與真值" loading="lazy"><figcaption class="winner">HD 0.000085 · 界 0.000085</figcaption></figure>
 
           <div class="row-label"><strong>不規則六邊形 · 8 angles</strong><span>非對稱凸體</span></div>
-          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_truth.png" alt="八角度不規則六邊形真值" loading="lazy"></figure>
-          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_fbp.png" alt="八角度不規則六邊形 FBP 0.5 凸化輪廓與真值" loading="lazy"><figcaption>HD 0.034990</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_sirt500.png" alt="八角度不規則六邊形 SIRT 500 凸化輪廓與真值" loading="lazy"><figcaption class="winner">HD 0.013696</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_tv1500.png" alt="八角度不規則六邊形 TV 1500 凸化輪廓與真值" loading="lazy"><figcaption>HD 0.021213</figcaption></figure>
-          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_envelope.png" alt="八角度不規則六邊形幾何內外包絡、中點重建與真值" loading="lazy"><figcaption>HD 0.066149 · 界 0.066297</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_truth.png?v=2" alt="八角度不規則六邊形真值" loading="lazy"></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_fbp.png?v=3" alt="八角度不規則六邊形 FBP 灰階重建與真值" loading="lazy"><figcaption>HD 0.033337</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_sirt500.png?v=3" alt="八角度不規則六邊形 SIRT 500 灰階重建與真值" loading="lazy"><figcaption>HD 0.013975</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_tv1500.png?v=3" alt="八角度不規則六邊形 TV 1500 灰階重建與真值" loading="lazy"><figcaption>HD 0.020625</figcaption></figure>
+          <figure class="visual-cell"><img src="assets/single_irregular_hexagon_m8_envelope.png?v=3" alt="八角度不規則六邊形反覆細化後的幾何包絡與真值" loading="lazy"><figcaption class="winner">HD 0.0000003 · 界 0.0000004</figcaption></figure>
         </div>
       </div>
 
@@ -109,19 +93,17 @@
         <div class="data-card-copy">
           <p class="eyebrow">SAME SINGLE-BODY CASE</p>
           <h3>代表案例的 Hausdorff 誤差</h3>
-          <p><code>slender-r37</code>。SIRT 與 TV 使用端點外框 <em>P</em> 作遮罩、值域 [0,1]、固定 0.5 門檻，再取最大連通區的凸包。</p>
+          <p><code>slender-r37</code>，8 angles。SIRT 與 TV 使用端點外框 <em>P</em><sub>0</sub> 作遮罩、值域 [0,1]、固定 0.5 門檻，再取最大連通區的凸包。</p>
         </div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>角度數</th><th>FBP 0.5</th><th>SIRT 500</th><th>TV 1500</th><th>包絡中點 R</th><th>保證界</th></tr></thead>
             <tbody>
-              <tr><th>4</th><td>0.134907</td><td class="best">0.008285</td><td>0.012433</td><td>0.070286</td><td>0.074976</td></tr>
-              <tr><th>8</th><td>0.025129</td><td class="best">0.008285</td><td class="best">0.008285</td><td>0.018117</td><td>0.020569</td></tr>
-              <tr><th>16</th><td class="best">0.005055</td><td>0.008285</td><td>0.008285</td><td>0.008921</td><td>0.009267</td></tr>
+              <tr><th>8</th><td>0.025129</td><td>0.008285</td><td>0.008285</td><td class="best">0.004068</td><td>0.005817</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="footnote">全部方法使用相同解析 Radon 資料，Δs=0.01。真值只用於事後 HD 評估。包絡界未經區間算術認證。<a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/results/SINGLE_BODY_METHOD.md">方法與證明</a> · <a href="assets/single_five_column_metrics.json">橢圓 SIRT／TV 數值</a> · <a href="assets/single_polygon_five_column_metrics.json">多邊形五欄數值</a> · <a href="assets/single_envelope_metrics.json">包絡數值</a>。</p>
+        <p class="footnote">全部方法使用相同 Radon 資料，Δs=0.01。幾何法做四輪更新；每個方向最多使用 16 條具有內弦的射線作外點排除。真值只用於事後 HD 評估。浮點包絡界未經區間算術認證。<a href="https://github.com/cclion61-droid/ellipse-sinogram-explorer/blob/main/results/SINGLE_BODY_METHOD.md">方法與證明</a> · <a href="assets/single_five_column_metrics.json">橢圓 SIRT／TV 數值</a> · <a href="assets/single_polygon_five_column_metrics.json">多邊形五欄數值</a> · <a href="assets/single_envelope_metrics.json">包絡數值</a>。</p>
       </div>
     </section>
 
@@ -202,34 +184,34 @@
 
             <div class="row-label"><strong>small_gap_2</strong><span>原方法無雙區塊錨點</span></div>
             <figure class="visual-cell"><img src="assets/separator_small_gap_2_truth.png" alt="small_gap_2 真值" loading="lazy"></figure>
-            <figure class="visual-cell"><img src="assets/separator_small_gap_2_fbp.png" alt="small_gap_2 FBP" loading="lazy"><figcaption>HD 1.111301 · 13 碎片</figcaption></figure>
-            <figure class="visual-cell"><img src="assets/separator_small_gap_2_sirt500.png" alt="small_gap_2 SIRT" loading="lazy"><figcaption>4 碎片 · 無法分成兩體</figcaption></figure>
-            <figure class="visual-cell"><img src="assets/separator_small_gap_2_tv1500.png" alt="small_gap_2 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_small_gap_2_fbp.png" alt="small_gap_2 FBP" loading="lazy"><figcaption>聯集 HD 0.212523 · 13 區塊</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_small_gap_2_sirt500.png" alt="small_gap_2 SIRT" loading="lazy"><figcaption>聯集 HD 0.169010 · 4 區塊</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_small_gap_2_tv1500.png" alt="small_gap_2 TV" loading="lazy"><figcaption>聯集 HD 0.022097 · 1 區塊</figcaption></figure>
             <figure class="visual-cell"><img src="assets/separator_small_gap_2_geometry.png" alt="small_gap_2 分離線搜尋與包絡" loading="lazy"><figcaption class="winner">HD 0.001021 · 界 0.001057</figcaption></figure>
 
             <div class="row-label"><strong>unresolved_gap_0</strong><span>最低殘差分支切入真體</span><em class="status-bad">不具認證</em></div>
             <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_truth.png" alt="unresolved_gap_0 真值" loading="lazy"></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_fbp.png" alt="unresolved_gap_0 FBP" loading="lazy"><figcaption>HD 0.886026 · 15 碎片</figcaption></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_sirt500.png" alt="unresolved_gap_0 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_tv1500.png" alt="unresolved_gap_0 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_fbp.png" alt="unresolved_gap_0 FBP" loading="lazy"><figcaption>聯集 HD 0.230700 · 15 區塊</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_sirt500.png" alt="unresolved_gap_0 SIRT" loading="lazy"><figcaption>聯集 HD 0.015625 · 1 區塊</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_tv1500.png" alt="unresolved_gap_0 TV" loading="lazy"><figcaption>聯集 HD 0.015625 · 1 區塊</figcaption></figure>
             <figure class="visual-cell"><img src="assets/separator_unresolved_gap_0_geometry.png" alt="unresolved_gap_0 分離線搜尋與包絡" loading="lazy"><figcaption class="not-certified">HD 0.002924 · 所列界不具認證</figcaption></figure>
 
             <div class="row-label"><strong>unresolved_gap_1</strong><span>保留 14 個相容候選</span><em>條件式</em></div>
             <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_truth.png" alt="unresolved_gap_1 真值" loading="lazy"></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_fbp.png" alt="unresolved_gap_1 FBP" loading="lazy"><figcaption>HD 0.884224 · 12 碎片</figcaption></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_sirt500.png" alt="unresolved_gap_1 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_tv1500.png" alt="unresolved_gap_1 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_fbp.png" alt="unresolved_gap_1 FBP" loading="lazy"><figcaption>聯集 HD 0.232282 · 12 區塊</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_sirt500.png" alt="unresolved_gap_1 SIRT" loading="lazy"><figcaption>聯集 HD 0.015625 · 1 區塊</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_tv1500.png" alt="unresolved_gap_1 TV" loading="lazy"><figcaption>聯集 HD 0.022097 · 1 區塊</figcaption></figure>
             <figure class="visual-cell"><img src="assets/separator_unresolved_gap_1_geometry.png" alt="unresolved_gap_1 分離線搜尋與包絡" loading="lazy"><figcaption class="conditional-result">HD 0.002378 · 條件式界 0.006241</figcaption></figure>
 
             <div class="row-label"><strong>unresolved_gap_2</strong><span>保留 19 個相容候選</span><em>條件式</em></div>
             <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_truth.png" alt="unresolved_gap_2 真值" loading="lazy"></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_fbp.png" alt="unresolved_gap_2 FBP" loading="lazy"><figcaption>HD 0.877390 · 21 碎片</figcaption></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_sirt500.png" alt="unresolved_gap_2 SIRT" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
-            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_tv1500.png" alt="unresolved_gap_2 TV" loading="lazy"><figcaption>1 區塊 · 無法分成兩體</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_fbp.png" alt="unresolved_gap_2 FBP" loading="lazy"><figcaption>聯集 HD 0.223716 · 21 區塊</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_sirt500.png" alt="unresolved_gap_2 SIRT" loading="lazy"><figcaption>聯集 HD 0.015625 · 1 區塊</figcaption></figure>
+            <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_tv1500.png" alt="unresolved_gap_2 TV" loading="lazy"><figcaption>聯集 HD 0.022097 · 1 區塊</figcaption></figure>
             <figure class="visual-cell"><img src="assets/separator_unresolved_gap_2_geometry.png" alt="unresolved_gap_2 分離線搜尋與包絡" loading="lazy"><figcaption class="conditional-result">HD 0.005057 · 條件式界 0.009285</figcaption></figure>
           </div>
         </div>
-        <p class="failure-note"><code>unresolved_gap_0</code> 的最佳分支切入真體 8.16×10<sup>−5</sup>；因此 0.005688 不能當成誤差認證。<a href="assets/separator_five_column_metrics.json">完整數值</a></p>
+        <p class="failure-note">FBP、SIRT、TV 的「聯集 HD」直接比較 257 × 257 網格上的真值聯集與 0.5-level 前景聯集；區塊數只另外描述是否成功分裂。像素間距為 0.015625。幾何欄仍列連續多邊形的 component HD 與條件式界。<code>unresolved_gap_0</code> 的最佳分支切入真體 8.16×10<sup>−5</sup>，因此 0.005688 不能當成誤差認證。<a href="assets/separator_five_column_metrics.json">完整數值</a></p>
       </div>
     </section>
 
