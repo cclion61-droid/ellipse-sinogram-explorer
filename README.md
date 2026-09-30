@@ -1,18 +1,22 @@
 # Radon Geometry Lab
 
-目前主線是[單凸體基礎](single/index.html)、[雙凸體延伸](tutorial/index.html)、[方法比較](results/index.html)與[分離線搜尋驗證](separator/index.html)。L 型切法研究保留為獨立工具。
+目前主線依序是[單凸體基礎](single/index.html)、[雙凸體延伸](tutorial/index.html)、[SIRT／TV 數值對照](sirt/index.html)、[方法比較](results/index.html)與[分離線搜尋驗證](separator/index.html)。L 型切法研究保留為獨立工具。
 
 ## 單凸體重建
 
-開啟 **[single/index.html](single/index.html)**。七步展示有限離散 Radon 資料如何形成投影支撐、外包絡 `P`、必存弦段、內包絡 `Q`、中點輸出與可計算的 Hausdorff 上界。頁面參考 Kölzow–Kuba–Volčič (1989) 的 core/envelope 原理，但只實作一輪可直接驗證的有限版本，不冒稱完整 Algorithm E。
+開啟 **[single/index.html](single/index.html)**。八步展示有限離散 Radon 資料如何形成初始內外包絡，並由弦長外點排除反覆收縮 `P`、擴張 `Q`，最後輸出中點體與 Hausdorff 上界。頁面不冒稱完整 Algorithm E。
 
 ## 雙凸體重建
 
 開啟 **[tutorial/index.html](tutorial/index.html)**，從同一張雙凸體總 sinogram 出發，以 10 步展示端點、可分離初始化、弦長上下界、內外包絡與輸出。重建端不知道個別 component sinogram 或橢圓參數。這是帶初始化條件的雙體延伸，不是 1989 論文已提出的雙體演算法。演算法細節與測試見[教學 README](tutorial/README.md)。
 
+## SIRT 與 TV 方法介紹
+
+開啟 **[sirt/index.html](sirt/index.html)**。由離散系統 `Ax=g` 開始，說明 SIRT 的正投影、殘差與正規化回投影，以及 TV 的資料擬合加總變差模型。本研究固定使用 SIRT 500 輪與 TV-PDHG 1500 輪、`λ=0.1`；兩法共享 `[0,1]` 限制、endpoint 外包絡、0.5 level set 與凸化流程。頁面區分方法本身、求解器與網站的比較協定。
+
 ## 重建方法比較
 
-開啟 **[results/index.html](results/index.html)**。單凸體使用相同的內外包絡原理：總弦長直接建立內包絡，不需分離視角；此頁展示一輪包絡與 FBP 0.5 對照。雙凸體另做交替細化，並比較 FBP、SIRT 與指定 TV，附四個初始化失敗案例。真值只供事後評估；失敗案例不併入成功誤差統計。
+開啟 **[results/index.html](results/index.html)**。單凸體與雙凸體都使用反覆更新的內外包絡，並與 FBP、SIRT、指定 TV 比較。單凸體只保留 8 角度的三個案例。
 
 ## 分離線搜尋驗證
 
