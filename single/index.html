@@ -7,25 +7,28 @@
   <title>單凸體幾何包絡重建・逐步解釋</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="single.css">
-  <link rel="stylesheet" href="../shared-nav.css">
+  <link rel="stylesheet" href="../shared-nav.css?v=2">
 </head>
 <body>
+  <header class="site-header">
+    <a class="site-brand" href="../index.html">RADON GEOMETRY LAB</a>
+    <nav class="research-nav" aria-label="研究導覽"><a href="../index.html">研究首頁</a><a href="index.html" aria-current="page">單凸體重建</a><a href="../tutorial/index.html">雙凸體重建</a><a href="../sirt/index.html">SIRT／TV</a><a href="../results/index.html">方法比較</a><a href="../separator/index.html">分離線搜尋</a></nav>
+  </header>
   <header class="header">
-    <nav class="research-nav" aria-label="研究導覽"><a href="../index.html">研究首頁</a><a href="index.html" aria-current="page">單凸體重建</a><a href="../tutorial/index.html">雙凸體重建</a><a href="../results/index.html">方法比較</a><a href="../separator/index.html">分離線搜尋</a></nav>
     <p class="eyebrow">ONE CONVEX BODY · CORE AND ENVELOPE</p>
     <h1>單凸體幾何包絡重建</h1>
-    <p class="intro">輸入只有有限角度、有限 detector 的弦長。依序建立外包絡 <em>P</em>、內包絡 <em>Q</em>，最後輸出中點體 <em>R</em>。橢圓只負責製造示範資料，不是重建模型。</p>
+    <p class="intro">輸入只有有限角度、有限 detector 的弦長。先建立初始內外包絡，再用量測弦長反覆收縮外包絡、擴張內包絡，最後輸出中點體 <em>R</em>。</p>
   </header>
   <main>
     <section class="literature" aria-labelledby="literatureTitle">
       <div><p class="eyebrow">LITERATURE POSITION</p><h2 id="literatureTitle">哪些來自文獻，哪些是本頁的有限版本？</h2></div>
       <article><strong>文獻原理</strong><p>Kölzow–Kuba–Volčič（1989）用遞迴的 core 與 envelope 逼近凸體，並討論離散投影資料與誤差估計。</p></article>
-      <article><strong>本頁實作</strong><p>只執行可直接驗證的一輪：投影支撐建立 <em>P</em>，弦長必存區間建立 <em>Q</em>，再取中點體。不是完整 Algorithm E。</p></article>
+      <article><strong>本頁實作</strong><p>投影支撐建立 <em>P</em><sub>0</sub>，必存弦段建立 <em>Q</em><sub>0</sub>；再由已知外點反覆收縮 <em>P</em>、重算 <em>Q</em>。這是有限輪浮點實作，不等同完整 Algorithm E。</p></article>
       <article><strong>雙凸體延伸</strong><p>文獻處理單一凸體；本專案額外假設兩體可初始化，再由總弦長推導各體的上下界。這是條件性延伸。</p></article>
     </section>
 
     <section class="controls" aria-label="示範設定">
-      <label>量測角度 <select id="views"><option value="4">4 個</option><option value="8" selected>8 個</option><option value="16">16 個</option></select></label>
+      <label>量測角度 <select id="views"><option value="8" selected>8 個</option></select></label>
       <span>無雜訊 · Δs = 0.03 · 密度 0／1</span>
       <label class="truth-toggle"><input id="truth" type="checkbox" checked> 疊加真值（只供評估）</label>
     </section>
@@ -55,17 +58,17 @@
 
     <section class="proof">
       <h2>包含關係為什麼成立？</h2>
-      <div><article><span>1</span><p>每個真投影支撐都落在外側 detector 之間，所以所有條帶的交集滿足 <em>D</em> ⊆ <em>P</em>。</p></article><article><span>2</span><p>每條真弦都位於 <em>P</em> 的弦內，且長度等於量測值 <em>g</em>，因此必含中央的必存區間。</p></article><article><span>3</span><p>必存區間在 <em>D</em> 內；<em>D</em> 凸，所以它們的凸包仍在 <em>D</em> 內，得到 <em>Q</em> ⊆ <em>D</em>。</p></article><article><span>4</span><p>由支撐函數 <em>h</em><sub>Q</sub> ≤ <em>h</em><sub>D</sub> ≤ <em>h</em><sub>P</sub>，中點體滿足可計算的 Hausdorff 上界。</p></article></div>
+      <div><article><span>1</span><p>外側 detector 條帶包含真投影，因此 <em>D</em>⊆<em>P</em><sub>0</sub>。</p></article><article><span>2</span><p>外包絡弦與實測弦長決定共同必存段；其凸包給出 <em>Q</em><sub>0</sub>⊆<em>D</em>。</p></article><article><span>3</span><p>長度為 <em>g</em> 且包含目前內弦的所有可行真弦，都到不了共同範圍外的點；這些外點可由凸性從 <em>P</em> 排除。</p></article><article><span>4</span><p>每輪保持 <em>Q</em><sub>r</sub>⊆<em>D</em>⊆<em>P</em><sub>r</sub>，並使 <em>Q</em> 擴張、<em>P</em> 收縮。</p></article><article><span>5</span><p>由支撐函數 <em>h</em><sub>Q</sub>≤<em>h</em><sub>D</sub>≤<em>h</em><sub>P</sub>，中點體滿足可計算的 Hausdorff 上界。</p></article></div>
     </section>
 
     <details class="details"><summary>假設、限制與文獻關係</summary>
       <p>未知物體是非空、緊緻、有內部的凸集合，密度為 1。detector 必須覆蓋完整投影，且首尾正值外側仍各有一格。此頁使用精確無雜訊資料與浮點幾何；不是含雜訊保證。</p>
-      <p>若必存線段無法形成二維凸包，本方法只回報「沒有形成內包絡」，不能用真值補足。有限方向通常不能唯一決定所有凸體；本頁的輸出是一個帶條件性上界的代表體。</p>
-      <p>參考：D. Kölzow, A. Kuba, A. Volčič, <a href="https://doi.org/10.1007/BF02187723" target="_blank" rel="noopener"><cite>An Algorithm for Reconstructing Convex Bodies from Their Projections</cite></a>, Discrete &amp; Computational Geometry 4 (1989), 205–237。論文的完整演算法比本頁的一輪構造更廣。</p>
+      <p>若必存線段無法形成二維凸包，本方法停止。有限方向通常不能唯一決定所有凸體；本頁只做四輪更新，每個方向選取最多 16 條具有非平凡內弦的量測線進行外點排除。</p>
+      <p>參考：D. Kölzow, A. Kuba, A. Volčič, <a href="https://doi.org/10.1007/BF02187723" target="_blank" rel="noopener"><cite>An Algorithm for Reconstructing Convex Bodies from Their Projections</cite></a>, Discrete &amp; Computational Geometry 4 (1989), 205–237。論文的完整演算法比本頁的有限輪實作更廣。</p>
     </details>
   </main>
   <script src="../tutorial/geometry.js"></script>
   <script src="../tutorial/phantom.js"></script>
-  <script src="single.js"></script>
+  <script src="single.js?v=3"></script>
 </body>
 </html>
